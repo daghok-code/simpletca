@@ -155,9 +155,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     protected function addFieldForDbGeneration(string $identifier): void
     {
+        $identifierNoTable = explode($identifier, '.');
+        $identifierNoTable = array_pop($identifierNoTable);
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
             new Table([
-                $identifier => static::getSqlDefinition()
+                $identifierNoTable => static::getSqlDefinition()
             ]),
             TcaGenerator::getTablename()
         );
