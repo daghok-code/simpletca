@@ -57,6 +57,7 @@ class ImageShortcut extends AbstractShortcut
         protected ?int $minitems = null,
         protected ?int $maxitems = null,
         protected ?string $fieldName = null,
+        protected ?string $allowedFileExtensions = null,
     ) {
         $this->fieldName = $this->fieldName ?? 'image';
         parent::__construct($label);
@@ -73,12 +74,18 @@ class ImageShortcut extends AbstractShortcut
         return $this;
     }
 
+    public function withAllowedFileExtension($allowedFileExtensions = null): static
+    {
+        $this->allowedFileExtensions = $allowedFileExtensions;
+        return $this;
+    }
+
     protected function buildConfig(): array
     {
         return ExtensionManagementUtility::getFileFieldTCAConfig(
             $this->fieldName,
             parent::buildConfig(),
-            $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
         );
     }
 }
