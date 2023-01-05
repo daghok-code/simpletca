@@ -20,7 +20,7 @@ class ImageShortcut extends AbstractShortcut
 
     protected static function getAllowedProperties(): array
     {
-        return ['minitems', 'maxitems'];
+        return ['minitems', 'maxitems', 'overrideChildTca', 'appearance'];
     }
 
     protected static function getDefaultProperties(): array
