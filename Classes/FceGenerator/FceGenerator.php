@@ -3,6 +3,7 @@
 namespace Febis\SimpleTca\FceGenerator;
 
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
+use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -48,7 +49,7 @@ class FceGenerator
             static::CONTENT_TABLE,
             'CType',
             [
-                false === empty($cTypeLabel) ? $cTypeLabel : $identifier,
+                false === empty($cTypeLabel) ? static::getLocalizedLabel($cTypeLabel) : $identifier,
                 $identifier,
                 $icon
             ]
@@ -71,6 +72,11 @@ class FceGenerator
             ],
         ];
         ArrayUtility::mergeRecursiveWithOverrule($GLOBALS['TCA'], $ttContentExtend);
+    }
+
+    protected static function getLocalizedLabel(string $label): string
+    {
+        return TcaGenerator::getConfig()->ll() . $label;
     }
 
     protected static function generateShowitem(string $showitem, Mode $showitemMode): string
