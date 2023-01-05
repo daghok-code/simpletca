@@ -11,27 +11,34 @@ class FceGenerator
 {
     protected final const CONTENT_TABLE = 'tt_content';
     protected final const FIELDS = [
-        'rowDescription' => 'rowDescription,'
+        'rowDescription' => 'rowDescription,',
+        'categories' => 'categories,'
     ];
     protected final const PALETTES = [
         'general' => '--palette--;;general,',
         'headers' => '--palette--;;headers,',
         'frames' => '--palette--;;frames,',
+        'appearanceLinks' => '--palette--;;appearanceLinks,',
         'hidden' => '--palette--;;hidden,',
         'access' => '--palette--;;access,',
+        'language' => '--palette--;;language,',
     ];
     protected final const TABS = [
         'general' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,',
         'appearance' => '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,',
         'access' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,',
         'notes' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,',
-        'extended' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,'
+        'extended' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,',
+        'language' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,',
+        'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,'
     ];
     protected final const JOINED = [
         'generalPrepend' => self::TABS['general'] . self::PALETTES['general'] . self::PALETTES['headers'],
-        'appearance' => self::TABS['appearance'] . self::PALETTES['frames'],
+        'appearance' => self::TABS['appearance'] . self::PALETTES['frames'] . self::PALETTES['appearanceLinks'],
         'access' => self::TABS['access'] . self::PALETTES['hidden'] . self::PALETTES['access'],
         'notes' => self::TABS['notes'] . self::FIELDS['rowDescription'],
+        'language' => self::TABS['language'] . self::PALETTES['language'],
+        'categories' => self::TABS['categories'] . self::FIELDS['categories']
     ];
 
     public static function registerFCE(
@@ -89,11 +96,14 @@ class FceGenerator
 
     protected static function showItemDefault(string $showitem): string
     {
+        debug('showItemDefault');
         return
             static::JOINED['generalPrepend'] .
             $showitem .
             static::JOINED['appearance'] .
+            static::JOINED['language'] .
             static::JOINED['access'] .
+            static::JOINED['categories'] .
             static::JOINED['notes'] .
             static::TABS['extended'];
     }
