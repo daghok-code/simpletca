@@ -1,0 +1,16 @@
+workflow:
+    rules:
+        -   if: $CI_COMMIT_TAG
+        -   if: $CI_COMMIT_BRANCH
+
+stages:
+    - release
+
+release:package:
+    image: alpine
+    stage: release
+    script:
+        - apk add curl
+        - 'curl --show-error --fail --request POST --header "Job-Token: $CI_JOB_TOKEN" --data tag=${CI_COMMIT_TAG} "${CI_API_V4_URL}/projects/$CI_PROJECT_ID/packages/composer"'
+    only:
+        - tags

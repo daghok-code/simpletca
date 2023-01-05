@@ -1,0 +1,5 @@
+services:
+    Febis\SimpleTca\EventListener\TcaGeneratorTableDefinitionUpdate:
+            -   name: event.listener
+                identifier: 'itltheme-tcagenerator-update-tables'
+                event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent

@@ -1,0 +1,37 @@
+{
+    "name": "febis/simpletca",
+    "type": "typo3-cms-extension",
+    "description": "Provides shortcuts and utilities for simple TCA generation",
+    "keywords": [
+        "TYPO3",
+        "extension"
+    ],
+    "authors": [
+        {
+            "name": "Felix Biskoping",
+            "role": "Developer"
+        }
+    ],
+    "license": "proprietary",
+    "config": {
+        "platform": {
+            "php": "8.1"
+        }
+    },
+    "require": {
+        "typo3/cms-core": "^11"
+    },
+    "replace": {
+        "typo3-ter/simpletca": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Febis\\SimpleTca\\": "Classes"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "simpletca"
+        }
+    }
+}
