@@ -96,7 +96,6 @@ class FceGenerator
 
     protected static function showItemDefault(string $showitem): string
     {
-        debug('showItemDefault');
         return
             static::JOINED['generalPrepend'] .
             $showitem .
