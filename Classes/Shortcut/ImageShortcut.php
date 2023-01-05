@@ -39,8 +39,6 @@ class ImageShortcut extends AbstractShortcut
                     ],
                 ],
             ],
-            'minitems' => 1,
-            'maxitems' => 1,
         ];
     }
 
