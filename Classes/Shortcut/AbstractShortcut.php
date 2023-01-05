@@ -4,7 +4,7 @@ namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
 use Febis\SimpleTca\Data\Table;
-use Febis\SimpleTca\Exception\NoLabelException;
+use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\TcaGenerator;
 
 /**
@@ -28,13 +28,13 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     protected array $unsetAttributes = [];
 
     public function __construct(
-        protected ?string $label = null
+        protected ?string $identifier = null
     ) {
     }
 
-    public function withLabel(?string $label): static
+    public function withIdentifier(?string $identifier): static
     {
-        $this->label = $label;
+        $this->identifier = $identifier;
 
         return $this;
     }
@@ -58,28 +58,28 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     }
 
     /**
-     * @throws NoLabelException
+     * @throws NoIdentifierException
      */
-    public function build(?string $label = null): array
+    public function build(?string $identifier = null): array
     {
-        $label = $label ?? $this->label;
+        $identifier = $identifier ?? $this->identifier;
 
-        if (null === $label) {
-            throw new NoLabelException();
+        if (null === $identifier) {
+            throw new NoIdentifierException();
         }
 
-        $this->addFieldForDbGeneration($label);
+        $this->addFieldForDbGeneration($identifier);
 
-        $tca = $this->buildContainer($label);
+        $tca = $this->buildContainer($identifier);
         $tca['config'] = $this->buildConfig();
 
         return $tca;
     }
 
-    protected function buildContainer(?string $label): array
+    protected function buildContainer(?string $identifier): array
     {
         return [
-            'label' => $label,
+            'label' => TcaGenerator::getConfig()->ll() . $identifier,
             'config' => []
         ];
     }
@@ -153,11 +153,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         return $this;
     }
 
-    protected function addFieldForDbGeneration(string $label): void
+    protected function addFieldForDbGeneration(string $identifier): void
     {
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
             new Table([
-                $label => static::getSqlDefinition()
+                $identifier => static::getSqlDefinition()
             ]),
             TcaGenerator::getTablename()
         );

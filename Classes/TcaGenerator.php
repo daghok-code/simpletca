@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca;
 
+use Febis\SimpleTca\Data\Config;
 use Febis\SimpleTca\FceGenerator\FceGenerator;
 use Febis\SimpleTca\TcaBuilder\TcaBuilder;
 use Febis\SimpleTca\Data\TcaDefinitionData;
@@ -35,6 +36,7 @@ class TcaGenerator
     protected static string $tablename = '';
     protected static bool $parseTablename = true;
     protected static ?TcaDefinitionData $tcaDefinitionDataInstance = null;
+    protected static ?Config $config = null;
 
     private function __construct()
     {
@@ -84,6 +86,14 @@ class TcaGenerator
             static::$tcaDefinitionDataInstance = GeneralUtility::makeInstance(TcaDefinitionData::class);
         }
         return static::$tcaDefinitionDataInstance;
+    }
+
+    public static function getConfig(): Config
+    {
+        if (static::$config === null) {
+            static::$config = GeneralUtility::makeInstance(Config::class);
+        }
+        return static::$config;
     }
 
     /**

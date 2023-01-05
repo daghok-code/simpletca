@@ -2,8 +2,8 @@
 
 namespace Febis\SimpleTca\Exception;
 
-/** Exception thrown when there is no label set for shortcut build. */
-class NoLabelException extends SimpleTcaException
+/** Exception thrown when there is no identifier set for shortcut build. */
+class NoIdentifierException extends SimpleTcaException
 {
     public function __construct(
         string $message = "",
