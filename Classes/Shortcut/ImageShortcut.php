@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
- * @method self withFieldname($fieldname = null)
  */
 class ImageShortcut extends AbstractShortcut
 {
@@ -57,7 +56,7 @@ class ImageShortcut extends AbstractShortcut
         protected ?string $fieldName = null,
         protected ?string $allowedFileExtensions = null,
     ) {
-        $this->fieldName = $this->fieldName ?? 'image';
+        $this->withFieldName($this->fieldName);
         parent::__construct($label);
     }
 
@@ -69,6 +68,12 @@ class ImageShortcut extends AbstractShortcut
         $this->minitems = $minitems;
         $this->maxitems = $maxitems;
 
+        return $this;
+    }
+
+    public function withFieldName($fieldName = null): static
+    {
+        $this->fieldName = $this->fieldName ?? 'image';
         return $this;
     }
 
