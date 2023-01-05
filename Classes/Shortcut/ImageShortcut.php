@@ -73,7 +73,7 @@ class ImageShortcut extends AbstractShortcut
 
     public function withFieldName($fieldName = null): static
     {
-        $this->fieldName = $this->fieldName ?? 'image';
+        $this->fieldName = $fieldName ?? 'image';
         return $this;
     }
 
