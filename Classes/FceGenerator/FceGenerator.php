@@ -90,6 +90,7 @@ class FceGenerator
     {
         return match ($showitemMode) {
             Mode::Default => static::showitemDefault($showitem),
+            Mode::DefaultNoHeader => static::showItemDefaultNoHeader($showitem),
             Mode::Override => $showitem
         };
     }
@@ -98,6 +99,20 @@ class FceGenerator
     {
         return
             static::JOINED['generalPrepend'] .
+            $showitem .
+            static::JOINED['appearance'] .
+            static::JOINED['language'] .
+            static::JOINED['access'] .
+            static::JOINED['categories'] .
+            static::JOINED['notes'] .
+            static::TABS['extended'];
+    }
+
+    protected static function showItemDefaultNoHeader(string $showitem): string
+    {
+        return
+            self::TABS['general'] .
+            self::PALETTES['general'] .
             $showitem .
             static::JOINED['appearance'] .
             static::JOINED['language'] .
