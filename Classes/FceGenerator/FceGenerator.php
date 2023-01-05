@@ -49,7 +49,7 @@ class FceGenerator
         array $columns = [],
         string $showItem = '',
         Mode $showitemMode = Mode::Default,
-        array $columnsOverride = []
+        array $columnsOverrides = []
     ): void {
         ExtensionManagementUtility::addTCAcolumns(static::CONTENT_TABLE, $columns);
         ExtensionManagementUtility::addTcaSelectItem(
@@ -73,7 +73,7 @@ class FceGenerator
                 'types' => [
                     $identifier => [
                         'showitem' => static::generateShowitem($showItem, $showitemMode),
-                        'columnsOverride' => $columnsOverride
+                        'columnsOverrides' => $columnsOverrides
                     ],
                 ],
             ],

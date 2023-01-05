@@ -55,7 +55,7 @@ class TcaGenerator
      * @param array $columns
      * @param string $showItem
      * @param Mode $showitemMode
-     * @param array $columnsOverride
+     * @param array $columnsOverrides
      * @return void
      */
     public static function registerFCE(
@@ -66,7 +66,7 @@ class TcaGenerator
         array $columns = [],
         string $showItem = '',
         Mode $showitemMode = Mode::Default,
-        array $columnsOverride = []
+        array $columnsOverrides = []
     ): void {
         FceGenerator::registerFCE(
             $identifier,
@@ -76,7 +76,7 @@ class TcaGenerator
             $columns,
             $showItem,
             $showitemMode,
-            $columnsOverride
+            $columnsOverrides
         );
     }
 
