@@ -3,6 +3,8 @@
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
+use Febis\SimpleTca\Data\Table;
+use Febis\SimpleTca\TcaGenerator;
 
 /**
  * @method self withAllowed($allowed = null)
@@ -34,6 +36,17 @@ class RelationShortcut extends AbstractShortcut
         return new Field(
             'INT',
             0
+        );
+    }
+
+    protected function addFieldForDbGeneration(string $identifier): void
+    {
+        parent::addFieldForDbGeneration($identifier);
+        TcaGenerator::getTcaDefinitionDataInstance()->addTable(
+            new Table([
+                'parent' => new Field('INT', 0)
+            ]),
+            $this->allowed
         );
     }
 
