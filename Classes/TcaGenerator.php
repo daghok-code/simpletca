@@ -164,7 +164,6 @@ class TcaGenerator
         } else {
             self::$tablename = '';
             self::enableParseTablename();
-            self::parseTablename();
         }
     }
 
@@ -188,6 +187,7 @@ class TcaGenerator
     public static function enableParseTablename(): void
     {
         self::setParseTablename(true);
+        self::parseTablename();
     }
 
     public static function disableParseTablename(): void
