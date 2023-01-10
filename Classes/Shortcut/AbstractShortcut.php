@@ -91,7 +91,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         $config['type'] = static::getType();
 
         $mergedProperties = static::toLowerCamelCase(static::getAllowedProperties());
-        ArrayUtility::mergeRecursiveWithOverrule($mergedProperties, array_keys($this->additionalAttributes));
+        ArrayUtility::mergeRecursiveWithOverrule($mergedProperties, array_keys($this->additionalAttributes ?? []));
 
         foreach ($mergedProperties as $property) {
             if ($property === static::getType()) {
