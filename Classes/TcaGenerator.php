@@ -164,6 +164,7 @@ class TcaGenerator
         } else {
             self::$tablename = '';
             self::enableParseTablename();
+            self::parseTablename();
         }
     }
 
