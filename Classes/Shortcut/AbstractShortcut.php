@@ -114,7 +114,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
             $property = static::getAllowedPropertyByLCC($property) ?? $property;
 
             /** set the attribute, or delete it, if it was intentionally reset */
-            if (!empty($value)) {
+            if (null !== $value) {
                 $config[$property] = $value;
             }
 
