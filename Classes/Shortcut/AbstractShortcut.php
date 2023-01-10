@@ -115,7 +115,12 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
             /** set the attribute, or delete it, if it was intentionally reset */
             if (null !== $value) {
-                $config[$property] = $value;
+                if(isset($config[$property]) && is_array($config[$property])) {
+                    ArrayUtility::mergeRecursiveWithOverrule($config[$property], $value);
+                }
+                else {
+                    $config[$property] = $value;
+                }
             }
 
             if (($this->unsetAttributes[$property] ?? false)) {
