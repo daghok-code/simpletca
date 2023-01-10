@@ -6,6 +6,7 @@ use Febis\SimpleTca\Data\Field;
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\TcaGenerator;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Currently attributes will only compared in first layer.
@@ -89,7 +90,10 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         $config = static::getDefaultProperties();
         $config['type'] = static::getType();
 
-        foreach (static::toLowerCamelCase(static::getAllowedProperties()) as $property) {
+        $mergedProperties = static::toLowerCamelCase(static::getAllowedProperties());
+        ArrayUtility::mergeRecursiveWithOverrule($mergedProperties, array_keys($this->additionalAttributes));
+
+        foreach ($mergedProperties as $property) {
             if ($property === static::getType()) {
                 continue;
             }
