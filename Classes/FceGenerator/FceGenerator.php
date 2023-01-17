@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca\FceGenerator;
 
+use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -41,24 +42,83 @@ class FceGenerator
         'categories' => self::TABS['categories'] . self::FIELDS['categories']
     ];
 
-    public static function registerFCE(
-        string $identifier,
-        string $cTypeLabel = '',
-        string $icon = '',
-        array $palettes = [],
-        array $columns = [],
-        string $showItem = '',
-        Mode $showitemMode = Mode::Default,
-        array $columnsOverrides = []
-    ): void {
-        ExtensionManagementUtility::addTCAcolumns(static::CONTENT_TABLE, $columns);
+    public function __construct(
+        protected string $identifier = '',
+        protected string $cTypeLabel = '',
+        protected string $icon = '',
+        protected array $palettes = [],
+        protected array $columns = [],
+        protected string $showItem = '',
+        protected Mode $showitemMode = Mode::Default,
+        protected array $columnsOverrides = []
+    ) {
+    }
+
+    public function withIdentifier(string $identifier = ''): static
+    {
+        $this->identifier = $identifier;
+        return $this;
+    }
+
+    public function withCTypeLabel(string $cTypeLabel = ''): static
+    {
+        $this->cTypeLabel = $cTypeLabel;
+        return $this;
+    }
+
+    public function withIcon(string $icon = ''): static
+    {
+        $this->icon = $icon;
+        return $this;
+    }
+
+    public function withPalettes(array $palettes = []): static
+    {
+        $this->palettes = $palettes;
+        return $this;
+    }
+
+    public function withColumns(array $columns = []): static
+    {
+        $this->columns = $columns;
+        return $this;
+    }
+
+    public function withShowItem(string $showitem = ''): static
+    {
+        $this->showItem = $showitem;
+        return $this;
+    }
+
+    public function withShowitemMode(Mode $showitemMode = Mode::Default): static
+    {
+        $this->showitemMode = $showitemMode;
+        return $this;
+    }
+
+    public function withColumnsOverrides(array $columnsOverrides = []): static
+    {
+        $this->columnsOverrides = $columnsOverrides;
+        return $this;
+    }
+
+    /**
+     * @throws NoIdentifierException
+     */
+    public function registerFCE(): void
+    {
+        if ($this->identifier === '') {
+            throw new NoIdentifierException();
+        }
+
+        ExtensionManagementUtility::addTCAcolumns(static::CONTENT_TABLE, $this->columns);
         ExtensionManagementUtility::addTcaSelectItem(
             static::CONTENT_TABLE,
             'CType',
             [
-                false === empty($cTypeLabel) ? static::getLocalizedLabel($cTypeLabel) : $identifier,
-                $identifier,
-                $icon
+                false === empty($this->cTypeLabel) ? static::getLocalizedLabel($this->cTypeLabel) : $this->identifier,
+                $this->identifier,
+                $this->icon
             ]
         );
 
@@ -66,14 +126,14 @@ class FceGenerator
             static::CONTENT_TABLE => [
                 'ctrl' => [
                     'typeicon_classes' => [
-                        $identifier => $icon
+                        $this->identifier => $this->icon
                     ]
                 ],
-                'palettes' => $palettes,
+                'palettes' => $this->palettes,
                 'types' => [
-                    $identifier => [
-                        'showitem' => static::generateShowitem($showItem, $showitemMode),
-                        'columnsOverrides' => $columnsOverrides
+                    $this->identifier => [
+                        'showitem' => static::generateShowitem($this->showItem, $this->showitemMode),
+                        'columnsOverrides' => $this->columnsOverrides
                     ],
                 ],
             ],

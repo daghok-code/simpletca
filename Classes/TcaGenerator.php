@@ -67,16 +67,19 @@ class TcaGenerator
         string $showItem = '',
         Mode $showitemMode = Mode::Default,
         array $columnsOverrides = []
-    ): void {
-        FceGenerator::registerFCE(
-            $identifier,
-            $cTypeLabel,
-            $icon,
-            $palettes,
-            $columns,
-            $showItem,
-            $showitemMode,
-            $columnsOverrides
+    ): FceGenerator {
+        return GeneralUtility::makeInstance(
+            FceGenerator::class,
+            [
+                $identifier,
+                $cTypeLabel,
+                $icon,
+                $palettes,
+                $columns,
+                $showItem,
+                $showitemMode,
+                $columnsOverrides
+            ]
         );
     }
 
