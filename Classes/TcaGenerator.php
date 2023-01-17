@@ -56,9 +56,9 @@ class TcaGenerator
      * @param string $showItem
      * @param Mode $showitemMode
      * @param array $columnsOverrides
-     * @return void
+     * @return FceGenerator
      */
-    public static function registerFCE(
+    public static function createFCE(
         string $identifier,
         string $cTypeLabel = '',
         string $icon = '',
