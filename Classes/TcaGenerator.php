@@ -70,16 +70,14 @@ class TcaGenerator
     ): FceGenerator {
         return GeneralUtility::makeInstance(
             FceGenerator::class,
-            [
-                $identifier,
-                $cTypeLabel,
-                $icon,
-                $palettes,
-                $columns,
-                $showItem,
-                $showitemMode,
-                $columnsOverrides
-            ]
+            $identifier,
+            $cTypeLabel,
+            $icon,
+            $palettes,
+            $columns,
+            $showItem,
+            $showitemMode,
+            $columnsOverrides
         );
     }
 
