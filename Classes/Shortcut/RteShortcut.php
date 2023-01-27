@@ -29,7 +29,7 @@ class RteShortcut extends AbstractShortcut
     {
         return new Field(
             'TEXT',
-            ''
+            'NULL'
         );
     }
 
