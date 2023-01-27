@@ -4,6 +4,7 @@ namespace Febis\SimpleTca;
 
 use Febis\SimpleTca\Data\Config;
 use Febis\SimpleTca\FceGenerator\FceGenerator;
+use Febis\SimpleTca\Shortcut\CheckboxShortcut;
 use Febis\SimpleTca\TcaBuilder\TcaBuilder;
 use Febis\SimpleTca\Data\TcaDefinitionData;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
@@ -30,6 +31,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @method static RteShortcut createRte($label = null)
  * @method static SelectSingleShortcut createSelectSingle($label = null, $items = null, $renderType = null)
  * @method static SlugShortcut createSlug($label = null, $size = null, $eval = null)
+ * @method static CheckboxShortcut createCheckbox($label = null, $renderType = null)
  */
 class TcaGenerator
 {
