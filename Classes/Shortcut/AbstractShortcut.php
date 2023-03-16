@@ -29,7 +29,8 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     protected array $unsetAttributes = [];
 
     public function __construct(
-        protected ?string $identifier = null
+        protected ?string $identifier = null,
+        protected ?Field $overrideField = null
     ) {
     }
 
@@ -55,6 +56,16 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     {
         $this->additionalAttributes = $additionalAttributes;
 
+        return $this;
+    }
+
+    /**
+     * @param Field|null $overrideField
+     * @return $this
+     */
+    public function overrideSqlDefinition(?Field $overrideField): static
+    {
+        $this->overrideField = $overrideField;
         return $this;
     }
 
@@ -119,10 +130,9 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
             /** set the attribute, or delete it, if it was intentionally reset */
             if (null !== $value) {
-                if(isset($config[$property]) && is_array($config[$property])) {
+                if (isset($config[$property]) && is_array($config[$property])) {
                     ArrayUtility::mergeRecursiveWithOverrule($config[$property], $value);
-                }
-                else {
+                } else {
                     $config[$property] = $value;
                 }
             }
@@ -172,7 +182,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         $identifierNoTable = array_pop($identifierNoTable);
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
             new Table([
-                $identifierNoTable => static::getSqlDefinition()
+                $identifierNoTable => $this->overrideField ?? static::getSqlDefinition()
             ]),
             TcaGenerator::getTablename()
         );
