@@ -7,4 +7,5 @@ enum Mode
     case Default;
     case Override;
     case DefaultNoHeader;
+    case DefaultNoHeaderNoAppearance;
 }

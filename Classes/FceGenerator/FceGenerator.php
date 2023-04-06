@@ -86,7 +86,7 @@ class FceGenerator
 
     public function withShowItem(string $showitem = ''): static
     {
-        $this->showItem = $showitem;
+        $this->showItem = static::withSeparatorAppended($showitem);
         return $this;
     }
 
@@ -150,12 +150,13 @@ class FceGenerator
     {
         return match ($showitemMode) {
             Mode::Default => static::showitemDefault($showitem),
-            Mode::DefaultNoHeader => static::showItemDefaultNoHeader($showitem),
+            Mode::DefaultNoHeader => static::showitemDefaultNoHeader($showitem),
+            Mode::DefaultNoHeaderNoAppearance => static::showitemDefaultNoHeaderNoAppearance($showitem),
             Mode::Override => $showitem
         };
     }
 
-    protected static function showItemDefault(string $showitem): string
+    protected static function showitemDefault(string $showitem): string
     {
         return
             static::JOINED['generalPrepend'] .
@@ -168,7 +169,7 @@ class FceGenerator
             static::TABS['extended'];
     }
 
-    protected static function showItemDefaultNoHeader(string $showitem): string
+    protected static function showitemDefaultNoHeader(string $showitem): string
     {
         return
             self::TABS['general'] .
@@ -180,5 +181,23 @@ class FceGenerator
             static::JOINED['categories'] .
             static::JOINED['notes'] .
             static::TABS['extended'];
+    }
+
+    protected static function showitemDefaultNoHeaderNoAppearance(string $showitem): string
+    {
+        return
+            self::TABS['general'] .
+            self::PALETTES['general'] .
+            $showitem .
+            static::JOINED['language'] .
+            static::JOINED['access'] .
+            static::JOINED['categories'] .
+            static::JOINED['notes'] .
+            static::TABS['extended'];
+    }
+
+    protected static function withSeparatorAppended(string $showitem): string
+    {
+        return $showitem . (str_ends_with(trim($showitem), ',') ? '' : ',');
     }
 }
