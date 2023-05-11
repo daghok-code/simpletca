@@ -53,7 +53,7 @@ class RelationMMShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?string $allowed = null,
         protected ?string $mM = null,
         protected ?string $mMOppositeField = null,
@@ -61,7 +61,7 @@ class RelationMMShortcut extends AbstractShortcut
         protected ?int $minitems = null,
         protected ?int $maxitems = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     protected function buildConfig(): array

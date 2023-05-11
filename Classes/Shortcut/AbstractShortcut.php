@@ -91,7 +91,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     protected function buildContainer(?string $identifier): array
     {
         return [
-            'label' => TcaGenerator::getConfig()->ll() . $identifier,
+            'label' => TcaGenerator::translate($identifier),
             'config' => []
         ];
     }
@@ -178,13 +178,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     protected function addFieldForDbGeneration(string $identifier): void
     {
-        $identifierNoTable = explode('.', $identifier);
-        $identifierNoTable = array_pop($identifierNoTable);
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
             new Table([
-                $identifierNoTable => $this->overrideField ?? static::getSqlDefinition()
+                $identifier => $this->overrideField ?? static::getSqlDefinition()
             ]),
-            TcaGenerator::getTablename()
+            TcaGenerator::getConfig()->getTablename()
         );
     }
 

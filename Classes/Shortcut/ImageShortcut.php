@@ -50,14 +50,14 @@ class ImageShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?int $minitems = null,
         protected ?int $maxitems = null,
         protected ?string $fieldName = null,
         protected ?string $allowedFileExtensions = null,
     ) {
         $this->withFieldName($this->fieldName);
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     public function withItemsRange(int $minitems = null, int $maxitems = null): static

@@ -34,8 +34,8 @@ class LinkShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null
+        ?string $identifier = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 }

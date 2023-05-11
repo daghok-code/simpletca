@@ -44,7 +44,7 @@ class AssetShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         ?int $minitems = null,
         ?int $maxitems = null,
         ?string $fieldName = null,
@@ -55,7 +55,7 @@ class AssetShortcut extends AbstractShortcut
         $this->fieldName = $fieldName;
         $this->allowedFileExtensions = $allowedFileExtensions;
         $this->withFieldName($this->fieldName);
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     /**

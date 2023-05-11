@@ -34,11 +34,11 @@ class SelectSingleShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?array $items = null,
         protected ?string $renderType = null
     ) {
         $this->renderType = $this->renderType ?? 'selectSingle';
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 }

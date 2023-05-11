@@ -7,6 +7,7 @@ use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class FceGenerator
 {
@@ -52,6 +53,8 @@ class FceGenerator
         protected Mode $showitemMode = Mode::Default,
         protected array $columnsOverrides = []
     ) {
+        $this->cTypeLabel = $identifier . '.title';
+        $this->icon = 'ce-' . $identifier;
     }
 
     public function withIdentifier(string $identifier = ''): static
@@ -122,7 +125,15 @@ class FceGenerator
             ]
         );
 
-        $ttContentExtend = [
+        $ttContentExtend = $this->buildTtContentExtend();
+        ArrayUtility::mergeRecursiveWithOverrule($GLOBALS['TCA'], $ttContentExtend);
+
+        TcaGenerator::resetItemConfig();
+    }
+
+    public function buildTtContentExtend(): array
+    {
+        return [
             static::CONTENT_TABLE => [
                 'ctrl' => [
                     'typeicon_classes' => [
@@ -138,7 +149,34 @@ class FceGenerator
                 ],
             ],
         ];
-        ArrayUtility::mergeRecursiveWithOverrule($GLOBALS['TCA'], $ttContentExtend);
+    }
+
+    public function debugRegisteringFCE(): static
+    {
+        $variable = [
+            'ExtensionManagementUtility::addTCAcolumns' => [
+                static::CONTENT_TABLE,
+                $this->columns
+            ],
+            'ExtensionManagementUtility::addTcaSelectItem' => [
+                static::CONTENT_TABLE,
+                'CType',
+                [
+                    false === empty($this->cTypeLabel) ? static::getLocalizedLabel($this->cTypeLabel) : $this->identifier,
+                    $this->identifier,
+                    $this->icon
+                ]
+            ],
+            'ArrayUtility::mergeRecursiveWithOverrule' => [
+                $GLOBALS['TCA'],
+                $this->buildTtContentExtend()
+            ]
+        ];
+        $title = $this->identifier;
+        DebuggerUtility::var_dump($variable, $title, 16);
+        die;
+
+        return $this;
     }
 
     protected static function getLocalizedLabel(string $label): string

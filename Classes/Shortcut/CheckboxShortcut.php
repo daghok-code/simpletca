@@ -35,11 +35,11 @@ class CheckboxShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         ?string $renderType = null
     ) {
         $this->renderType = $renderType;
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     public function asToggle(): static

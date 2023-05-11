@@ -3,56 +3,63 @@
 namespace Febis\SimpleTca;
 
 use Febis\SimpleTca\Data\Config;
-use Febis\SimpleTca\FceGenerator\FceGenerator;
-use Febis\SimpleTca\Shortcut\AssetShortcut;
-use Febis\SimpleTca\Shortcut\CheckboxShortcut;
-use Febis\SimpleTca\Shortcut\LinkShortcut;
-use Febis\SimpleTca\Shortcut\PassthroughShortcut;
-use Febis\SimpleTca\TcaBuilder\TcaBuilder;
+use Febis\SimpleTca\Data\ItemConfig;
 use Febis\SimpleTca\Data\TcaDefinitionData;
+use Febis\SimpleTca\Exception\CallstackExtractionException;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
 use Febis\SimpleTca\Exception\ShortcutNotAllowedException;
-use Febis\SimpleTca\Exception\TableNotParsedException;
+use Febis\SimpleTca\FceGenerator\FceGenerator;
+use Febis\SimpleTca\FceGenerator\Showitem\Mode;
+use Febis\SimpleTca\Shortcut\AssetShortcut;
+use Febis\SimpleTca\Shortcut\CheckboxShortcut;
 use Febis\SimpleTca\Shortcut\ImageShortcut;
 use Febis\SimpleTca\Shortcut\InputShortcut;
 use Febis\SimpleTca\Shortcut\IRREShortcut;
+use Febis\SimpleTca\Shortcut\LinkShortcut;
+use Febis\SimpleTca\Shortcut\PassthroughShortcut;
 use Febis\SimpleTca\Shortcut\RelationMMShortcut;
 use Febis\SimpleTca\Shortcut\RelationShortcut;
 use Febis\SimpleTca\Shortcut\RteShortcut;
 use Febis\SimpleTca\Shortcut\SelectSingleShortcut;
 use Febis\SimpleTca\Shortcut\SlugShortcut;
 use Febis\SimpleTca\Shortcut\TcaShortcutInterface;
-use Febis\SimpleTca\FceGenerator\Showitem\Mode;
+use Febis\SimpleTca\TcaBuilder\TcaBuilder;
+use ReflectionException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * @method static AssetShortcut createAsset($label = null, $minitems = null, $maxitems = null, $fieldname = null)
- * @method static CheckboxShortcut createCheckbox($label = null, $renderType = null)
- * @method static ImageShortcut createImage($label = null, $minitems = null, $maxitems = null, $fieldname = null)
- * @method static InputShortcut createInput($label = null, $eval = null, $renderType = null)
- * @method static IRREShortcut createIRRE($label = null, $foreignTable = null, $minitems = null, $maxitems = null)
- * @method static LinkShortcut createLink($label = null)
- * @method static PassthroughShortcut createPassthrough($label = null)
- * @method static RelationShortcut createRelation($label = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
- * @method static RelationMMShortcut createRelationMM($label = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
- * @method static RteShortcut createRte($label = null)
- * @method static SelectSingleShortcut createSelectSingle($label = null, $items = null, $renderType = null)
- * @method static SlugShortcut createSlug($label = null, $size = null, $eval = null)
+ * @method static AssetShortcut createAsset($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
+ * @method static CheckboxShortcut createCheckbox($identifier = null, $renderType = null)
+ * @method static ImageShortcut createImage($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
+ * @method static InputShortcut createInput($identifier = null, $eval = null, $renderType = null)
+ * @method static IRREShortcut createIRRE($identifier = null, $foreignTable = null, $minitems = null, $maxitems = null)
+ * @method static LinkShortcut createLink($identifier = null)
+ * @method static PassthroughShortcut createPassthrough($identifier = null)
+ * @method static RelationShortcut createRelation($identifier = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
+ * @method static RelationMMShortcut createRelationMM($identifier = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
+ * @method static RteShortcut createRte($identifier = null)
+ * @method static SelectSingleShortcut createSelectSingle($identifier = null, $items = null, $renderType = null)
+ * @method static SlugShortcut createSlug($identifier = null, $size = null, $eval = null)
  */
 class TcaGenerator
 {
-    protected static string $tablename = '';
-    protected static bool $parseTablename = true;
     protected static ?TcaDefinitionData $tcaDefinitionDataInstance = null;
     protected static ?Config $config = null;
+    protected static ?ItemConfig $tmpItemConfig = null;
 
     private function __construct()
     {
     }
 
-    public static function createTca(string $table, string $extKey): TcaBuilder
+    /**
+     * @throws CallstackExtractionException
+     */
+    public static function createTca(string $table = null, string $extKey = null): TcaBuilder
     {
-        return new TcaBuilder($table, $extKey);
+        self::getConfig();
+        self::$config->injectRuntimeData();
+
+        return new TcaBuilder($table ?? self::$config->getTablename(), $extKey ?? self::$config->getExtkey());
     }
 
     /**
@@ -76,6 +83,11 @@ class TcaGenerator
         Mode $showitemMode = Mode::Default,
         array $columnsOverrides = []
     ): FceGenerator {
+
+        self::getConfig();
+        self::$config->injectRuntimeData();
+        self::$tmpItemConfig = GeneralUtility::makeInstance(ItemConfig::class, $identifier);
+
         return GeneralUtility::makeInstance(
             FceGenerator::class,
             $identifier,
@@ -97,12 +109,26 @@ class TcaGenerator
         return static::$tcaDefinitionDataInstance;
     }
 
+    /**
+     * @throws CallstackExtractionException
+     */
     public static function getConfig(): Config
     {
         if (static::$config === null) {
             static::$config = GeneralUtility::makeInstance(Config::class);
+            static::$config->injectRuntimeData();
         }
         return static::$config;
+    }
+
+    public static function getItemConfig(): ItemConfig
+    {
+        return static::$tmpItemConfig;
+    }
+
+    public static function resetItemConfig(): void
+    {
+        static::$tmpItemConfig = null;
     }
 
     /**
@@ -111,7 +137,7 @@ class TcaGenerator
      * @param array $arguments
      * @return TcaShortcutInterface
      * @throws MethodNotDefinedException
-     * @throws ShortcutNotAllowedException
+     * @throws ShortcutNotAllowedException|CallstackExtractionException
      */
     public static function __callStatic(string $name, array $arguments): TcaShortcutInterface
     {
@@ -123,13 +149,11 @@ class TcaGenerator
                 $reflectionClass = new \ReflectionClass($fqcn);
                 $shortcutInstance = $reflectionClass->newInstance(...$arguments);
                 if ($reflectionClass->implementsInterface(TcaShortcutInterface::class)) {
-                    if (self::isParseTablename()) {
-                        self::parseTablename();
-                    }
+                    self::$config->injectRuntimeData();
                     /** @var TcaShortcutInterface $shortcutInstance */
                     return $shortcutInstance;
                 }
-            } catch (\ReflectionException) {
+            } catch (ReflectionException) {
                 throw new ShortcutNotAllowedException(
                     'Shortcut "' . $fqcn . '" was not found or does not implement "' .
                     TcaShortcutInterface::class . '".',
@@ -154,72 +178,9 @@ class TcaGenerator
         return '\\' . __NAMESPACE__ . '\\Shortcut\\';
     }
 
-    /**
-     * @return string
-     */
-    public static function getTablename(): string
+    public static function translate(string $key): string
     {
-        return self::$tablename;
-    }
-
-    /**
-     * @param string|null $tablename
-     */
-    public static function setTablename(?string $tablename = null): void
-    {
-        if ($tablename !== null) {
-            self::$tablename = $tablename;
-            self::disableParseTablename();
-        } else {
-            self::$tablename = '';
-            self::enableParseTablename();
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public static function isParseTablename(): bool
-    {
-        return self::$parseTablename;
-    }
-
-    /**
-     * @param bool $parseTablename
-     */
-    public static function setParseTablename(bool $parseTablename): void
-    {
-        self::$parseTablename = $parseTablename;
-    }
-
-
-    public static function enableParseTablename(): void
-    {
-        self::setParseTablename(true);
-        self::parseTablename();
-    }
-
-    public static function disableParseTablename(): void
-    {
-        self::setParseTablename(false);
-    }
-
-    /**
-     * @throws TableNotParsedException
-     */
-    protected static function parseTablename(): void
-    {
-        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
-
-        foreach ($stackTrace as $traceItem) {
-            preg_match('/[^\/]+\/Configuration\/TCA\/([^\.]+)\.php/', $traceItem['file'] ?? '', $fileMatch);
-
-            if (!empty($fileMatch) && isset($fileMatch[1])) {
-                self::$tablename = $fileMatch[1];
-                return;
-            }
-        }
-
-        throw new TableNotParsedException();
+        $identifier = !empty(self::$tmpItemConfig?->identifier ?? '') ? self::$tmpItemConfig->identifier . '.' : '';
+        return self::$config->ll() . self::$config->getTablename() . '.' . $identifier . $key;
     }
 }

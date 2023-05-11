@@ -56,12 +56,12 @@ class IRREShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?string $foreignTable = null,
         protected ?int $minitems = null,
         protected ?int $maxitems = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     public function withItemsRange(int $minitems = null, int $maxitems = null): static

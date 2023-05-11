@@ -36,10 +36,10 @@ class InputShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?string $eval = null,
         protected ?string $renderType = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 }

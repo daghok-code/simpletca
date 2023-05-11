@@ -51,13 +51,13 @@ class RelationShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?string $allowed = null,
         protected ?int $size = null,
         protected ?int $minitems = null,
         protected ?int $maxitems = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 
     public function withItemsRange(int $minitems = null, int $maxitems = null): static

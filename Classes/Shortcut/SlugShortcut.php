@@ -48,10 +48,10 @@ class SlugShortcut extends AbstractShortcut
     }
 
     public function __construct(
-        ?string $label = null,
+        ?string $identifier = null,
         protected ?string $size = null,
         protected ?string $eval = null
     ) {
-        parent::__construct($label);
+        parent::__construct($identifier);
     }
 }

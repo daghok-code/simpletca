@@ -3,7 +3,7 @@
 namespace Febis\SimpleTca\Exception;
 
 /** Exception thrown when the table could not be parsed. */
-class TableNotParsedException extends SimpleTcaException
+class CallstackExtractionException extends SimpleTcaException
 {
     public function __construct(
         string $message = "",
@@ -12,8 +12,8 @@ class TableNotParsedException extends SimpleTcaException
     ) {
         $message = "" !== $message
             ? $message
-            : "There is no \"Configuration/TCA\" file in calling backtrace found.
-            Please set the tablename yourself by calling \"setParseTablename\"";
+            : "There is no \"Configuration/TCA(/Overrides)\" file in calling backtrace found.
+            Please set the extkey and tablename yourself by calling \"setExtkey\" and \"setTablename\"";
         parent::__construct($message, $code, $previous);
     }
 }

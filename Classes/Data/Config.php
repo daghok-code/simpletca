@@ -2,11 +2,16 @@
 
 namespace Febis\SimpleTca\Data;
 
-use Febis\SimpleTca\Exception\NotImplementedException;
+use Febis\SimpleTca\Exception\CallstackExtractionException;
+use Febis\SimpleTca\Utility\CallStackExtractor;
 use TYPO3\CMS\Core\SingletonInterface;
 
 class Config implements SingletonInterface
 {
+    protected string $extkey = '';
+    protected string $tablename = '';
+    protected string $identifier = '';
+    protected bool $overrideTablename = false;
     protected string $llFile = 'contentelements';
     protected ?string $llFullOverride = null; // eg. LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:
 
@@ -36,9 +41,71 @@ class Config implements SingletonInterface
         $this->llFullOverride = $llFullOverride;
     }
 
-    protected function getExtKey(): string
+    /**
+     * @return string
+     */
+    public function getTablename(): string
     {
-        // TODO: search for a way to get extension key on runtime from calling context (the TCA file which generates TCA)
-        throw new NotImplementedException('getExtKey');
+        return $this->tablename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtkey(): string
+    {
+        return $this->extkey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier(string $identifier): void
+    {
+        $this->identifier = $identifier;
+    }
+
+    /**
+     * @param string|null $tablename
+     */
+    public function setTablename(?string $tablename): void
+    {
+        $this->tablename = $tablename;
+        $this->overrideTablename = true;
+    }
+
+    public function resetTablename(): void
+    {
+        $this->tablename = '';
+        $this->overrideTablename = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOverrideTablename(): bool
+    {
+        return $this->overrideTablename;
+    }
+
+    /**
+     * @throws CallstackExtractionException
+     */
+    public function injectRuntimeData(): void
+    {
+        [$extkey, $tablename] = CallStackExtractor::extractFromCallstack();
+
+        $this->extkey = $extkey ?? '';
+        if (false === $this->isOverrideTablename()) {
+            $this->tablename = $tablename ?? '';
+        }
     }
 }
