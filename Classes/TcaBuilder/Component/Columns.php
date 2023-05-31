@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
+use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 class Columns implements ComponentInterface
@@ -10,7 +11,6 @@ class Columns implements ComponentInterface
 
     public function __construct(
         private readonly string $table,
-        private readonly string $l10n,
         private readonly bool $activateLanguage,
         private readonly bool $activateEnableColumns
     ) {
@@ -170,7 +170,7 @@ class Columns implements ComponentInterface
             if (str_contains($column['label'], 'LLL:')) {
                 continue;
             }
-            $this->columns[$key]['label'] = $this->l10n . $this->columns[$key]['label'];
+            $this->columns[$key]['label'] = TcaGenerator::translate($this->columns[$key]['label']);
         }
     }
 

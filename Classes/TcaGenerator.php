@@ -83,7 +83,6 @@ class TcaGenerator
         Mode $showitemMode = Mode::Default,
         array $columnsOverrides = []
     ): FceGenerator {
-
         self::getConfig();
         self::$config->injectRuntimeData();
         self::$tmpItemConfig = GeneralUtility::makeInstance(ItemConfig::class, $identifier);
@@ -180,6 +179,7 @@ class TcaGenerator
 
     public static function translate(string $key): string
     {
+        self::$config->injectRuntimeData();
         $identifier = !empty(self::$tmpItemConfig?->identifier ?? '') ? self::$tmpItemConfig->identifier . '.' : '';
         return self::$config->ll() . self::$config->getTablename() . '.' . $identifier . $key;
     }

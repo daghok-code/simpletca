@@ -151,7 +151,10 @@ class FceGenerator
         ];
     }
 
-    public function debugRegisteringFCE(): static
+    /**
+     * Function uses exit(0), because otherwise no output is generated
+     */
+    public function debugRegisteringFCE(): void
     {
         $variable = [
             'ExtensionManagementUtility::addTCAcolumns' => [
@@ -174,9 +177,7 @@ class FceGenerator
         ];
         $title = $this->identifier;
         DebuggerUtility::var_dump($variable, $title, 16);
-        die;
-
-        return $this;
+        exit(0);
     }
 
     protected static function getLocalizedLabel(string $label): string

@@ -5,12 +5,12 @@ namespace Febis\SimpleTca\Data;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use Febis\SimpleTca\Utility\CallStackExtractor;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Config implements SingletonInterface
 {
     protected string $extkey = '';
     protected string $tablename = '';
-    protected string $identifier = '';
     protected bool $overrideTablename = false;
     protected string $llFile = 'contentelements';
     protected ?string $llFullOverride = null; // eg. LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:
@@ -58,22 +58,6 @@ class Config implements SingletonInterface
     }
 
     /**
-     * @return string
-     */
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * @param string $identifier
-     */
-    public function setIdentifier(string $identifier): void
-    {
-        $this->identifier = $identifier;
-    }
-
-    /**
      * @param string|null $tablename
      */
     public function setTablename(?string $tablename): void
@@ -101,7 +85,7 @@ class Config implements SingletonInterface
      */
     public function injectRuntimeData(): void
     {
-        [$extkey, $tablename] = CallStackExtractor::extractFromCallstack();
+        [$extkey, $tablename] = GeneralUtility::makeInstance(CallStackExtractor::class)->extractFromCallstack();
 
         $this->extkey = $extkey ?? '';
         if (false === $this->isOverrideTablename()) {
