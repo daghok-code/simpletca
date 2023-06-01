@@ -28,15 +28,21 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     protected array $unsetAttributes = [];
 
+    protected ?string $label = null;
+
     public function __construct(
         protected ?string $identifier = null,
         protected ?Field $overrideField = null
     ) {
+        if (!is_null($this->identifier)) {
+            $this->withIdentifier($this->identifier);
+        }
     }
 
     public function withIdentifier(?string $identifier): static
     {
         $this->identifier = $identifier;
+        $this->label = TcaGenerator::translate($identifier);
 
         return $this;
     }
@@ -72,26 +78,24 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     /**
      * @throws NoIdentifierException
      */
-    public function build(?string $identifier = null): array
+    public function build(): array
     {
-        $identifier = $identifier ?? $this->identifier;
-
-        if (null === $identifier) {
+        if (null === $this->identifier) {
             throw new NoIdentifierException();
         }
 
-        $this->addFieldForDbGeneration($identifier);
+        $this->addFieldForDbGeneration($this->identifier);
 
-        $tca = $this->buildContainer($identifier);
+        $tca = $this->buildContainer();
         $tca['config'] = $this->buildConfig();
 
         return $tca;
     }
 
-    protected function buildContainer(?string $identifier): array
+    protected function buildContainer(): array
     {
         return [
-            'label' => TcaGenerator::translate($identifier),
+            'label' => $this->label,
             'config' => []
         ];
     }
@@ -186,7 +190,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         );
     }
 
-    protected static function toLowerCamelCase(array|string $str): array|string
+    protected static function toLowerCamelCase(array | string $str): array | string
     {
         $separators = ' _-';
         $separatorsRegex = '\s\-_';

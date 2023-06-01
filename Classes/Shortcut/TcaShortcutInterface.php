@@ -7,7 +7,7 @@ namespace Febis\SimpleTca\Shortcut;
  */
 interface TcaShortcutInterface
 {
-    public function build(?string $label = null): array;
+    public function build(): array;
 
     public function withArguments(array $args): static;
 }
