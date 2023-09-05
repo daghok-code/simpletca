@@ -7,3 +7,11 @@ services:
             -   name: event.listener
                 identifier: 'simpletca-tcagenerator-build-tca'
                 event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
+    Febis\SimpleTca\EventListener\FcePageTsConfig:
+            -   name: event.listener
+                identifier: 'simpletca-fcegenerator-generate-tsconfig'
+                event: TYPO3\CMS\Core\Configuration\Event\ModifyLoadedPageTsConfigEvent
+    cache.simpletca_tsconfig:
+        class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+        factory: [ '@TYPO3\CMS\Core\Cache\CacheManager', 'getCache' ]
+        arguments: [ 'simpletca_tsconfig' ]

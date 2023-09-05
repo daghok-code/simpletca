@@ -2,7 +2,10 @@
 
 namespace Febis\SimpleTca\FceGenerator;
 
+use Febis\SimpleTca\Data\TsConfig\FceGroup;
+use Febis\SimpleTca\Data\TsConfig\FceItem;
 use Febis\SimpleTca\Exception\NoIdentifierException;
+use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -51,7 +54,10 @@ class FceGenerator
         protected array $columns = [],
         protected string $showItem = '',
         protected Mode $showitemMode = Mode::Default,
-        protected array $columnsOverrides = []
+        protected array $columnsOverrides = [],
+        protected bool $typoscript = true,
+        protected bool $tsConfig = true,
+        protected string $tsConfigFceGroupIdentifier = 'default',
     ) {
         $this->cTypeLabel = $identifier . '.title';
         $this->icon = 'ce-' . $identifier;
@@ -105,6 +111,18 @@ class FceGenerator
         return $this;
     }
 
+    public function withoutTyposcript(): static
+    {
+        $this->typoscript = false;
+        return $this;
+    }
+
+    public function withoutTsConfig(): static
+    {
+        $this->tsConfig = false;
+        return $this;
+    }
+
     /**
      * @throws NoIdentifierException
      */
@@ -119,7 +137,7 @@ class FceGenerator
             static::CONTENT_TABLE,
             'CType',
             [
-                false === empty($this->cTypeLabel) ? static::getLocalizedLabel($this->cTypeLabel) : $this->identifier,
+                $this->getLabel(),
                 $this->identifier,
                 $this->icon
             ]
@@ -127,6 +145,10 @@ class FceGenerator
 
         $ttContentExtend = $this->buildTtContentExtend();
         ArrayUtility::mergeRecursiveWithOverrule($GLOBALS['TCA'], $ttContentExtend);
+
+        if ($this->tsConfig) {
+            $this->generateTsConfig();
+        }
 
         TcaGenerator::resetItemConfig();
     }
@@ -152,7 +174,27 @@ class FceGenerator
     }
 
     /**
-     * Function uses exit(0), because otherwise no output is generated
+     * @throws TsConfigExistsException
+     */
+    public function generateTsConfig(): void
+    {
+        if (!TcaGenerator::getTsConfigData()->hasFceGroup($this->tsConfigFceGroupIdentifier)) {
+            TcaGenerator::getTsConfigData()->addFceGroup(
+                $this->tsConfigFceGroupIdentifier,
+                new FceGroup($this->tsConfigFceGroupIdentifier)
+            );
+        }
+
+        if (!TcaGenerator::getTsConfigData()->hasFceItem($this->identifier)) {
+            TcaGenerator::getTsConfigData()->addFceItem(
+                $this->identifier,
+                new FceItem($this->identifier, $this->tsConfigFceGroupIdentifier, $this->icon, $this->getLabel())
+            );
+        }
+    }
+
+    /**
+     * Function uses exit(0), because otherwise no output is generatedfce
      */
     public function debugRegisteringFCE(): void
     {
@@ -165,7 +207,7 @@ class FceGenerator
                 static::CONTENT_TABLE,
                 'CType',
                 [
-                    false === empty($this->cTypeLabel) ? static::getLocalizedLabel($this->cTypeLabel) : $this->identifier,
+                    $this->getLabel(),
                     $this->identifier,
                     $this->icon
                 ]
@@ -178,6 +220,19 @@ class FceGenerator
         $title = $this->identifier;
         DebuggerUtility::var_dump($variable, $title, 16);
         exit(0);
+    }
+
+    protected function getLabel(): string
+    {
+        if (false === empty($this->cTypeLabel) && str_starts_with($this->cTypeLabel, 'LLL:')) {
+            return $this->cTypeLabel;
+        } else {
+            if (false === empty($this->cTypeLabel)) {
+                return static::getLocalizedLabel($this->cTypeLabel);
+            } else {
+                return $this->identifier;
+            }
+        }
     }
 
     protected static function getLocalizedLabel(string $label): string

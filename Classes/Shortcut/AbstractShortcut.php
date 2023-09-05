@@ -5,6 +5,7 @@ namespace Febis\SimpleTca\Shortcut;
 use Febis\SimpleTca\Data\Field;
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\Exception\NoIdentifierException;
+use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
@@ -12,7 +13,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  * Currently attributes will only compared in first layer.
  * TODO: add recursively comparison for attributes to load default or overridden values
  */
-abstract class AbstractShortcut implements TcaShortcutInterface
+abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
     abstract protected static function getType(): string;
 
@@ -32,7 +33,8 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     public function __construct(
         protected ?string $identifier = null,
-        protected ?Field $overrideField = null
+        protected ?string $tablename = null,
+        protected ?Field $overrideField = null,
     ) {
         if (!is_null($this->identifier)) {
             $this->withIdentifier($this->identifier);
@@ -43,6 +45,13 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     {
         $this->identifier = $identifier;
         $this->label = TcaGenerator::translate($identifier);
+
+        return $this;
+    }
+
+    public function withTablename(?string $tablename): static
+    {
+        $this->tablename = $tablename;
 
         return $this;
     }
@@ -77,11 +86,16 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     /**
      * @throws NoIdentifierException
+     * @throws NoTablenameException
      */
     public function build(): array
     {
         if (null === $this->identifier) {
             throw new NoIdentifierException();
+        }
+
+        if (null === $this->tablename) {
+            throw new NoTablenameException();
         }
 
         $this->addFieldForDbGeneration($this->identifier);
@@ -186,7 +200,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
             new Table([
                 $identifier => $this->overrideField ?? static::getSqlDefinition()
             ]),
-            TcaGenerator::getConfig()->getTablename()
+            $this->tablename
         );
     }
 
@@ -210,5 +224,29 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         );
 
         return false === empty($filtered) ? reset($filtered) : null;
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return property_exists(static::class, $offset);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->offsetExists($offset) ? $this->$offset : null;
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if ($this->offsetExists($offset)) {
+            $this->$offset = $value;
+        }
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        if($this->offsetExists($offset)) {
+            $this->$offset = null;
+        }
     }
 }

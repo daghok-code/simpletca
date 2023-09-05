@@ -12,18 +12,33 @@ class Config implements SingletonInterface
     protected string $extkey = '';
     protected string $tablename = '';
     protected bool $overrideTablename = false;
-    protected string $llFile = 'contentelements';
+    protected ?string $llFile = null;
     protected ?string $llFullOverride = null; // eg. LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:
+    protected string $defaultFile = 'contentelements';
 
     public function ll(): string
     {
         return $this->llFullOverride ??
-            'LLL:EXT:' . $this->getExtKey() . '/Resources/Private/Language/' . $this->llFile . '.xlf:';
+            'LLL:EXT:' .
+            $this->getExtKey() .
+            '/Resources/Private/Language/' .
+            ($this->llFile ?? $this->defaultFile) .
+            '.xlf:';
+    }
+
+    public function setDefaultLocalizationFile(string $filename): void
+    {
+        $this->defaultFile = $filename;
     }
 
     public function setLlFile(string $llFile): void
     {
         $this->llFile = $llFile;
+    }
+
+    public function resetLlFile(): void
+    {
+        $this->llFile = null;
     }
 
     public function getLlFile(): string

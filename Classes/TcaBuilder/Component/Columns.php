@@ -2,11 +2,13 @@
 
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
+use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 class Columns implements ComponentInterface
 {
+    public ?array $overrideDefaultColumns = null;
     protected array $columns = [];
 
     public function __construct(
@@ -99,7 +101,6 @@ class Columns implements ComponentInterface
     private function getLanguageColumns(): array
     {
         return [
-
             'sys_language_uid' => [
                 'exclude' => true,
                 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
@@ -151,19 +152,17 @@ class Columns implements ComponentInterface
     private function getDefaultColumns(): array
     {
         return [
-            'title' => [
-                'label' => '.title',
-                'config' => [
-                    'type' => 'input',
-                    'eval' => 'required,trim',
-                ],
-            ],
+            'title' => TcaGenerator::createInput('title')->withEval('required,trim'),
         ];
     }
 
     private function completeLabelPaths()
     {
         foreach ($this->columns as $key => $column) {
+            if ($column instanceof AbstractShortcut) {
+                // no need to translate label because already done at this point
+                continue;
+            }
             if (!isset($column['label'])) {
                 continue;
             }

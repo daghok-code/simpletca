@@ -5,11 +5,15 @@ namespace Febis\SimpleTca;
 use Febis\SimpleTca\Data\Config;
 use Febis\SimpleTca\Data\ItemConfig;
 use Febis\SimpleTca\Data\TcaDefinitionData;
+use Febis\SimpleTca\Data\TsConfig\FceGroup;
+use Febis\SimpleTca\Data\TsConfig\TsConfigData;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
 use Febis\SimpleTca\Exception\ShortcutNotAllowedException;
+use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\FceGenerator\FceGenerator;
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
+use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\Shortcut\AssetShortcut;
 use Febis\SimpleTca\Shortcut\CheckboxShortcut;
 use Febis\SimpleTca\Shortcut\ImageShortcut;
@@ -44,6 +48,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaGenerator
 {
     protected static ?TcaDefinitionData $tcaDefinitionDataInstance = null;
+    protected static ?TsConfigData $tsConfigData = null;
     protected static ?Config $config = null;
     protected static ?ItemConfig $tmpItemConfig = null;
 
@@ -56,10 +61,9 @@ class TcaGenerator
      */
     public static function createTca(string $table = null, string $extKey = null): TcaBuilder
     {
-        self::getConfig();
-        self::$config->injectRuntimeData();
+        self::getConfig()->injectRuntimeData();
 
-        return new TcaBuilder($table ?? self::$config->getTablename(), $extKey ?? self::$config->getExtkey());
+        return new TcaBuilder($table ?? self::$config->getTablename());
     }
 
     /**
@@ -71,6 +75,8 @@ class TcaGenerator
      * @param string $showItem
      * @param Mode $showitemMode
      * @param array $columnsOverrides
+     * @param bool $typoscript
+     * @param bool $tsConfig
      * @return FceGenerator
      */
     public static function createFCE(
@@ -81,10 +87,11 @@ class TcaGenerator
         array $columns = [],
         string $showItem = '',
         Mode $showitemMode = Mode::Default,
-        array $columnsOverrides = []
+        array $columnsOverrides = [],
+        bool $typoscript = true,
+        bool $tsConfig = true,
     ): FceGenerator {
-        self::getConfig();
-        self::$config->injectRuntimeData();
+        self::getConfig()->injectRuntimeData();
         self::$tmpItemConfig = GeneralUtility::makeInstance(ItemConfig::class, $identifier);
 
         return GeneralUtility::makeInstance(
@@ -96,8 +103,18 @@ class TcaGenerator
             $columns,
             $showItem,
             $showitemMode,
-            $columnsOverrides
+            $columnsOverrides,
+            $typoscript,
+            $tsConfig,
         );
+    }
+
+    /**
+     * @throws TsConfigExistsException
+     */
+    private static function overrideDefaultTsConfigFceGroup(string $header, string $show = '*'): void
+    {
+        static::getTsConfigData()->addFceGroup('default', new FceGroup('group', $header, $show), true);
     }
 
     public static function getTcaDefinitionDataInstance(): TcaDefinitionData
@@ -106,6 +123,21 @@ class TcaGenerator
             static::$tcaDefinitionDataInstance = GeneralUtility::makeInstance(TcaDefinitionData::class);
         }
         return static::$tcaDefinitionDataInstance;
+    }
+
+    /**
+     * @throws TsConfigExistsException
+     */
+    public static function getTsConfigData(): TsConfigData
+    {
+        if (static::$tsConfigData === null) {
+            static::$tsConfigData = GeneralUtility::makeInstance(TsConfigData::class);
+
+            if (!static::$tsConfigData->hasFceGroup('default')) {
+                static::$tsConfigData->addFceGroup('default', new FceGroup('default', 'Default'));
+            }
+        }
+        return static::$tsConfigData;
     }
 
     /**
@@ -149,6 +181,11 @@ class TcaGenerator
                 $shortcutInstance = $reflectionClass->newInstance(...$arguments);
                 if ($reflectionClass->implementsInterface(TcaShortcutInterface::class)) {
                     self::$config->injectRuntimeData();
+
+                    if($shortcutInstance instanceof AbstractShortcut) {
+                        $shortcutInstance->withTablename(self::$config->getTablename());
+                    }
+
                     /** @var TcaShortcutInterface $shortcutInstance */
                     return $shortcutInstance;
                 }
@@ -182,5 +219,10 @@ class TcaGenerator
         self::$config->injectRuntimeData();
         $identifier = !empty(self::$tmpItemConfig?->identifier ?? '') ? self::$tmpItemConfig->identifier . '.' : '';
         return self::$config->ll() . self::$config->getTablename() . '.' . $identifier . $key;
+    }
+
+    public function setDefaultLocalizationFile(string $filename)
+    {
+        self::getConfig()->setDefaultLocalizationFile($filename);
     }
 }

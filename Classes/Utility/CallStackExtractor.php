@@ -16,7 +16,7 @@ class CallStackExtractor implements SingletonInterface
      */
     public function extractFromCallstack(): array
     {
-        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10);
+        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);
 
         foreach ($stackTrace as $traceItem) {
             preg_match(
