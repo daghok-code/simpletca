@@ -146,9 +146,12 @@ class TcaGenerator
     public static function getConfig(): Config
     {
         if (static::$config === null) {
-            static::$config = GeneralUtility::makeInstance(Config::class);
-            static::$config->injectRuntimeData();
+            static::$config = GeneralUtility::makeInstance(Config::class)
+                ->switchFileConfig()
+                ->injectRuntimeData();
         }
+
+        static::$config->switchFileConfig();
         return static::$config;
     }
 
@@ -182,7 +185,7 @@ class TcaGenerator
                 if ($reflectionClass->implementsInterface(TcaShortcutInterface::class)) {
                     self::$config->injectRuntimeData();
 
-                    if($shortcutInstance instanceof AbstractShortcut) {
+                    if ($shortcutInstance instanceof AbstractShortcut) {
                         $shortcutInstance->withTablename(self::$config->getTablename());
                     }
 

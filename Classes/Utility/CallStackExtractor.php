@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca\Utility;
 
+use Doctrine\DBAL\Driver\Exception;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -14,29 +15,62 @@ class CallStackExtractor implements SingletonInterface
     /**
      * @throws CallstackExtractionException
      */
-    public function extractFromCallstack(): array
+    public function extractExtkeyAndTablename(): array
     {
-        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);
+        [$extkey, $filename] = $this->filterExtkeyAndFilename();
+
+        $realTablename = $this->getRealTablename($filename);
+
+        return [$extkey, $realTablename];
+    }
+
+    /**
+     * @throws CallstackExtractionException
+     */
+    public function extractExtkeyAndFilename(): array
+    {
+        return $this->filterExtkeyAndFilename();
+    }
+
+    /**
+     * @throws CallstackExtractionException
+     */
+    protected function filterExtkeyAndFilename(): array
+    {
+        $fileMatch = $this->filterStacktrace('/[^\/]+\/([^\/]+)\/Configuration\/TCA\/(Overrides\/)?([^.]+)\.php/');
+
+        $extkey = $fileMatch[1] ?? null;
+        $filename = $fileMatch[3] ?? null;
+
+        return [$extkey, $filename];
+    }
+
+    /**
+     * @throws CallstackExtractionException
+     */
+    protected function filterStacktrace(string $pattern): array
+    {
+        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);;
 
         foreach ($stackTrace as $traceItem) {
             preg_match(
-                '/[^\/]+\/([^\/]+)\/Configuration\/TCA\/(Overrides\/)?([^\.]+)\.php/',
+                $pattern,
                 $traceItem['file'] ?? '',
                 $fileMatch
             );
 
             if (!empty($fileMatch)) {
-                $extkey = $fileMatch[1] ?? null;
-                $tablename = $fileMatch[3] ?? null;
-
-                $realTablename = $this->getRealTablename($tablename);
-                return [$extkey, $realTablename];
+                return $fileMatch;
             }
         }
 
         throw new CallstackExtractionException();
     }
 
+    /**
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
     protected function getTableList(): array
     {
         if (null === $this->tableList) {

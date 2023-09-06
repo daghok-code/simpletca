@@ -9,12 +9,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Config implements SingletonInterface
 {
-    protected string $extkey = '';
-    protected string $tablename = '';
-    protected bool $overrideTablename = false;
-    protected ?string $llFile = null;
-    protected ?string $llFullOverride = null; // eg. LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:
     protected string $defaultFile = 'contentelements';
+    /** @var TcaFileConfig[] $cachedTcaFileConfigs */
+    protected array $cachedTcaFileConfigs = [];
+    protected ?TcaFileConfig $currentTcaFileConfig = null;
 
     public function ll(): string
     {
@@ -33,78 +31,51 @@ class Config implements SingletonInterface
 
     public function setLlFile(string $llFile): void
     {
-        $this->llFile = $llFile;
-    }
-
-    public function resetLlFile(): void
-    {
-        $this->llFile = null;
-    }
-
-    public function getLlFile(): string
-    {
-        return $this->llFile;
-    }
-
-    public function getLlFullOverride(): ?string
-    {
-        return $this->llFullOverride;
+        $this->currentTcaFileConfig->llFile = $llFile;
     }
 
     public function setLlFullOverride(?string $llFullOverride): void
     {
-        $this->llFullOverride = $llFullOverride;
+        $this->currentTcaFileConfig->llFullOverride = $llFullOverride;
     }
 
-    /**
-     * @return string
-     */
     public function getTablename(): string
     {
-        return $this->tablename;
+        return $this->currentTcaFileConfig->getTablename();
     }
 
-    /**
-     * @return string
-     */
     public function getExtkey(): string
     {
-        return $this->extkey;
+        return $this->currentTcaFileConfig->getExtkey();
     }
 
-    /**
-     * @param string|null $tablename
-     */
     public function setTablename(?string $tablename): void
     {
-        $this->tablename = $tablename;
-        $this->overrideTablename = true;
-    }
-
-    public function resetTablename(): void
-    {
-        $this->tablename = '';
-        $this->overrideTablename = false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOverrideTablename(): bool
-    {
-        return $this->overrideTablename;
+        $this->currentTcaFileConfig->setTablename($tablename);
     }
 
     /**
      * @throws CallstackExtractionException
      */
-    public function injectRuntimeData(): void
+    public function injectRuntimeData(): static
     {
-        [$extkey, $tablename] = GeneralUtility::makeInstance(CallStackExtractor::class)->extractFromCallstack();
+        $this->currentTcaFileConfig->injectRuntimeData();
 
-        $this->extkey = $extkey ?? '';
-        if (false === $this->isOverrideTablename()) {
-            $this->tablename = $tablename ?? '';
+        return $this;
+    }
+
+    public function switchFileConfig(): static
+    {
+        [$extkey, $filename] = GeneralUtility::makeInstance(CallStackExtractor::class)->extractExtkeyAndFilename();
+
+        $cacheName = $extkey . '-' . $filename;
+
+        if (!isset($this->cachedTcaFileConfigs[$cacheName])) {
+            $this->cachedTcaFileConfigs[$cacheName] = GeneralUtility::makeInstance(TcaFileConfig::class);
         }
+
+        $this->currentTcaFileConfig = $this->cachedTcaFileConfigs[$cacheName];
+
+        return $this;
     }
 }
