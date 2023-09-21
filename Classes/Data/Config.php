@@ -57,13 +57,6 @@ class Config implements SingletonInterface
     /**
      * @throws CallstackExtractionException
      */
-    public function injectRuntimeData(): static
-    {
-        $this->currentTcaFileConfig->injectRuntimeData();
-
-        return $this;
-    }
-
     public function switchFileConfig(): static
     {
         [$extkey, $filename] = GeneralUtility::makeInstance(CallStackExtractor::class)->extractExtkeyAndFilename();
@@ -72,6 +65,7 @@ class Config implements SingletonInterface
 
         if (!isset($this->cachedTcaFileConfigs[$cacheName])) {
             $this->cachedTcaFileConfigs[$cacheName] = GeneralUtility::makeInstance(TcaFileConfig::class);
+            $this->cachedTcaFileConfigs[$cacheName]->injectRuntimeData();
         }
 
         $this->currentTcaFileConfig = $this->cachedTcaFileConfigs[$cacheName];

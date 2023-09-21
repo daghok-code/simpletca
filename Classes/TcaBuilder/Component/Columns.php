@@ -4,7 +4,6 @@ namespace Febis\SimpleTca\TcaBuilder\Component;
 
 use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\TcaGenerator;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 class Columns implements ComponentInterface
 {
@@ -14,15 +13,25 @@ class Columns implements ComponentInterface
     public function __construct(
         private readonly string $table,
         private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        private readonly bool $activateEnableColumns,
     ) {
         $this->addBaseColumns();
         $this->addDefaultColumns();
     }
 
-    public function addColumn(array $column)
+    public function addColumn(AbstractShortcut $column): void
     {
-        ArrayUtility::mergeRecursiveWithOverrule($this->columns, $column);
+        $this->columns[$column->getIdentifier()] = $column;
+    }
+
+    /**
+     * @param list<AbstractShortcut> $columns
+     */
+    public function addColumns(array $columns): void
+    {
+        foreach ($columns as $column) {
+            $this->addColumn($column);
+        }
     }
 
     private function addBaseColumns()
@@ -30,13 +39,13 @@ class Columns implements ComponentInterface
         if ($this->activateEnableColumns) {
             $this->columns = array_merge(
                 $this->columns,
-                $this->getEnableColumns()
+                $this->getEnableColumns(),
             );
         }
         if ($this->activateLanguage) {
             $this->columns = array_merge(
                 $this->columns,
-                $this->getLanguageColumns()
+                $this->getLanguageColumns(),
             );
         }
     }
@@ -45,7 +54,7 @@ class Columns implements ComponentInterface
     {
         $this->columns = array_merge(
             $this->columns,
-            $this->overrideDefaultColumns ?? $this->getDefaultColumns()
+            $this->overrideDefaultColumns ?? $this->getDefaultColumns(),
         );
     }
 

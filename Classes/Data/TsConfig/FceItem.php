@@ -2,13 +2,8 @@
 
 namespace Febis\SimpleTca\Data\TsConfig;
 
-use Febis\SimpleTca\Exception\TsConfigExistsException;
-
 class FceItem
 {
-    /**
-     * @throws TsConfigExistsException
-     */
     public function __construct(
         protected string $identifier,
         protected string $groupIdentifier,

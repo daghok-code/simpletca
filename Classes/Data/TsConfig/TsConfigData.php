@@ -4,6 +4,7 @@ namespace Febis\SimpleTca\Data\TsConfig;
 
 use Febis\SimpleTca\Exception\TsConfigExistsException;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Package\Cache\PackageDependentCacheIdentifier;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -11,6 +12,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TsConfigData
 {
+    protected const CACHE_IDENTIFIER = 'simpletca_tsconfig';
+
     /** @var FceItem[] $fceItems */
     protected array $fceItems = [];
     /** @var FceGroup[] $fceGroups */
@@ -31,7 +34,7 @@ class TsConfigData
     }
 
     /**
-     * @throws TsConfigExistsException
+     * @throws TsConfigExistsException|NoSuchCacheException
      */
     public function addFceItem(string $identifier, FceItem $fceItem, bool $override = false): static
     {
@@ -48,7 +51,7 @@ class TsConfigData
 
     public function removeFceItem(string $identifier): static
     {
-        if (null !== $this->fceItems[$identifier] ?? null) {
+        if($this->hasFceItem($identifier)) {
             unset($this->fceItems[$identifier]);
         }
 
@@ -77,7 +80,7 @@ class TsConfigData
 
     public function removeFceGroup(string $identifier): static
     {
-        if (null !== $this->fceGroups[$identifier] ?? null) {
+        if ($this->hasFceGroup($identifier)) {
             unset($this->fceGroups[$identifier]);
         }
 
@@ -101,35 +104,41 @@ class TsConfigData
         return $tsConfig;
     }
 
-    protected static function getBaseTcaCacheIdentifier()
+    protected static function getBaseTsConfigCacheIdentifier(): string
     {
         return (new PackageDependentCacheIdentifier(GeneralUtility::makeInstance(PackageManager::class)))
-            ->withPrefix('simpletca_tsconfig')->toString();
+            ->withPrefix(static::CACHE_IDENTIFIER)->toString();
     }
 
-    protected function createBaseTcaCacheFile(FrontendInterface $codeCache): void
+    protected function createBaseTsConfigCacheFile(FrontendInterface $codeCache): void
     {
         $codeCache->set(
-            static::getBaseTcaCacheIdentifier(),
+            static::getBaseTsConfigCacheIdentifier(),
             'return '
             . var_export(['tsConfigData' => $this], true)
             . ';'
         );
     }
 
+    /**
+     * @throws NoSuchCacheException
+     */
     protected static function getCodeCache(): FrontendInterface
     {
         if (null === static::$codeCache) {
-            static::$codeCache = GeneralUtility::makeInstance(CacheManager::class)->getCache('simpletca_tsconfig');
+            static::$codeCache = GeneralUtility::makeInstance(CacheManager::class)->getCache(static::CACHE_IDENTIFIER);
         }
 
         return static::$codeCache;
     }
 
+    /**
+     * @throws NoSuchCacheException
+     */
     protected function updateCache(): void
     {
         $codeCache = static::getCodeCache();
-        $this->createBaseTcaCacheFile($codeCache);
+        $this->createBaseTsConfigCacheFile($codeCache);
     }
 
     public static function __set_state(array $data)
@@ -140,10 +149,13 @@ class TsConfigData
         return $newObj;
     }
 
+    /**
+     * @throws NoSuchCacheException
+     */
     protected function fetchFromCache(): void
     {
         $codeCache = static::getCodeCache();
-        $cacheIdentifier = static::getBaseTcaCacheIdentifier();
+        $cacheIdentifier = static::getBaseTsConfigCacheIdentifier();
         $cacheData = $codeCache->require($cacheIdentifier);
         if ($cacheData) {
             /** @var static $tsConfigDataObj */

@@ -5,12 +5,13 @@ namespace Febis\SimpleTca\Shortcut;
 use Febis\SimpleTca\Data\Field;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 
 /**
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
  */
-class ImageShortcut extends AbstractShortcut
+class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
 {
     protected static function getType(): string
     {
@@ -47,6 +48,22 @@ class ImageShortcut extends AbstractShortcut
             'INT',
             0
         );
+    }
+
+    public function getDataProcessorType(): string
+    {
+        return FilesProcessor::class;
+    }
+
+    public function getDataProcessorConfig(string $fieldName): array
+    {
+        return [
+            'references' => [
+               'table' => 'tt_content',
+               'fieldName' => $fieldName,
+            ],
+            'as' => $fieldName
+        ];
     }
 
     public function __construct(

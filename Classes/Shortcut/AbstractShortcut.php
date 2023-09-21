@@ -249,4 +249,9 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             $this->$offset = null;
         }
     }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
 }
