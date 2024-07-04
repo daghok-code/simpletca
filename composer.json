@@ -1,7 +1,9 @@
 {
     "name": "febis/simpletca",
-    "type": "typo3-cms-extension",
     "description": "Provides shortcuts and utilities for simple TCA generation",
+    "license": "proprietary",
+    "type": "typo3-cms-extension",
+    "version": "1.0.0",
     "keywords": [
         "TYPO3",
         "extension"
@@ -12,14 +14,18 @@
             "role": "Developer"
         }
     ],
-    "license": "proprietary",
-    "config": {
-        "platform": {
-            "php": "8.1"
-        }
-    },
     "require": {
-        "typo3/cms-core": "^11"
+        "php": "^8.1",
+        "typo3/cms-core": "^11 || ^12"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.43",
+        "friendsoftypo3/phpstan-typo3": "^0.9",
+        "overtrue/phplint": "^4.2",
+        "phpmd/phpmd": "^2.12",
+        "phpstan/phpstan": "^1.8",
+        "squizlabs/php_codesniffer": "^3.7",
+        "ssch/typo3-rector": "^1.1"
     },
     "replace": {
         "typo3-ter/simpletca": "self.version"
@@ -29,9 +35,53 @@
             "Febis\\SimpleTca\\": "Classes"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "bin-dir": "bin",
+        "platform": {
+            "php": "8.1"
+        },
+        "vendor-dir": "vendor"
+    },
     "extra": {
         "typo3/cms": {
             "extension-key": "simpletca"
         }
+    },
+    "scripts": {
+        "lint:all": [
+            "@lint:phpcs",
+            "@lint:phpmd",
+            "@lint:phplint"
+        ],
+        "lint:phpcpd": [
+            "bin/phpcpd --exclude TCA --fuzzy packages"
+        ],
+        "lint:phpcs": [
+            "bin/phpcs -s -p --standard=.testing/phpcs/ruleset.xml"
+        ],
+        "lint:phplint": [
+            "bin/phplint -v --ansi --no-cache packages"
+        ],
+        "lint:phpmd": [
+            "bin/phpmd packages ansi .testing/phpmd/ruleset.xml"
+        ],
+        "test:all": [
+            "@test:phpstan",
+            "@test:rector:dry"
+        ],
+        "test:phpstan": [
+            "php -d memory_limit=4G bin/phpstan analyse -c .testing/phpstan/phpstan.neon packages"
+        ],
+        "test:rector": [
+            "bin/rector process --config=.testing/rector/rector.php packages"
+        ],
+        "test:rector:dry": [
+            "bin/rector process --config=.testing/rector/rector.php packages --dry-run"
+        ]
     }
 }

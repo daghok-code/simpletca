@@ -2,10 +2,14 @@
 
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class Control implements ComponentInterface
 {
     public string $label = 'title';
     public bool $hideTable = false;
+    public bool $ignorePageTypeRestriction = false;
     public bool $readOnly = false;
     public bool $adminOnly = false;
     public string $icon = '';
@@ -15,7 +19,7 @@ class Control implements ComponentInterface
         protected string $title,
         public bool $activateLanguage,
         public bool $activateSorting,
-        public bool $activateEnableColumns
+        public bool $activateEnableColumns,
     ) {
     }
 
@@ -49,6 +53,11 @@ class Control implements ComponentInterface
                 'searchFields' => $this->searchFields,
             ],
         ];
+
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() >= 12) {
+            $ctrl['ctrl']['security']['ignorePageTypeRestriction'] = $this->ignorePageTypeRestriction;
+        }
+
         $this->removeDisabledConfiguration($ctrl);
 
         return $ctrl;
@@ -61,13 +70,13 @@ class Control implements ComponentInterface
                 $ctrl['ctrl']['transOrigPointerField'],
                 $ctrl['ctrl']['transOrigDiffSourceField'],
                 $ctrl['ctrl']['languageField'],
-                $ctrl['ctrl']['translationSource']
+                $ctrl['ctrl']['translationSource'],
             );
         }
 
         if (!$this->activateSorting) {
             unset(
-                $ctrl['ctrl']['sortby']
+                $ctrl['ctrl']['sortby'],
             );
         }
 

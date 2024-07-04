@@ -17,6 +17,7 @@ use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\Shortcut\AssetShortcut;
 use Febis\SimpleTca\Shortcut\CheckboxShortcut;
+use Febis\SimpleTca\Shortcut\FileShortcut;
 use Febis\SimpleTca\Shortcut\ImageShortcut;
 use Febis\SimpleTca\Shortcut\InputShortcut;
 use Febis\SimpleTca\Shortcut\IRREShortcut;
@@ -33,6 +34,7 @@ use ReflectionException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
+ * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null)
  * @method static AssetShortcut createAsset($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static CheckboxShortcut createCheckbox($identifier = null, $renderType = null)
  * @method static ImageShortcut createImage($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
