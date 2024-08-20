@@ -8,7 +8,7 @@ class CallstackExtractionException extends SimpleTcaException
     public function __construct(
         string $message = "",
         int $code = 1672744036,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         $message = "" !== $message
             ? $message

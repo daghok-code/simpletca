@@ -39,7 +39,7 @@ class AssetShortcut extends AbstractShortcut
     {
         return new Field(
             'INT',
-            0
+            0,
         );
     }
 
@@ -48,7 +48,7 @@ class AssetShortcut extends AbstractShortcut
         ?int $minitems = null,
         ?int $maxitems = null,
         ?string $fieldName = null,
-        ?string $allowedFileExtensions = null
+        ?string $allowedFileExtensions = null,
     ) {
         $this->minitems = $minitems;
         $this->maxitems = $maxitems;
@@ -95,7 +95,7 @@ class AssetShortcut extends AbstractShortcut
         return ExtensionManagementUtility::getFileFieldTCAConfig(
             $this->fieldName,
             parent::buildConfig(),
-            $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext']
+            $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext'],
         );
     }
 }

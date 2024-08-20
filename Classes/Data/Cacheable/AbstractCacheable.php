@@ -1,0 +1,30 @@
+<?php
+
+namespace Febis\SimpleTca\Data\Cacheable;
+
+use Febis\SimpleTca\Debug\DebugAwareInterface;
+use Febis\SimpleTca\Debug\DebugAwareTrait;
+
+abstract class AbstractCacheable implements CacheableInterface, DebugAwareInterface
+{
+    use DebugAwareTrait;
+
+    public function __construct()
+    {
+        $this->initDebug();
+    }
+
+    public static function __set_state(array $data)
+    {
+        $newObj = new static();
+
+        if (isset($data['debug'])) {
+            unset($data['debug']);
+        }
+
+        foreach ($data as $propKey => $propValue) {
+            $newObj->{$propKey} = $propValue;
+        }
+        return $newObj;
+    }
+}

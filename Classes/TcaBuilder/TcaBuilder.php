@@ -52,20 +52,20 @@ class TcaBuilder
             TcaGenerator::translate('title'),
             $this->activateLanguage,
             $this->activateSorting,
-            $this->activateEnableColumns
+            $this->activateEnableColumns,
         );
         $this->columns = new Columns(
             $this->table,
             $this->activateLanguage,
-            $this->activateEnableColumns
+            $this->activateEnableColumns,
         );
         $this->palettes = new Palettes(
             $this->activateLanguage,
-            $this->activateEnableColumns
+            $this->activateEnableColumns,
         );
         $this->types = new Types(
             $this->activateLanguage,
-            $this->activateEnableColumns
+            $this->activateEnableColumns,
         );
     }
 
@@ -75,7 +75,7 @@ class TcaBuilder
             $this->ctrl->getArray(),
             $this->columns->getArray(),
             $this->palettes->getArray(),
-            $this->types->getArray()
+            $this->types->getArray(),
         );
     }
 }

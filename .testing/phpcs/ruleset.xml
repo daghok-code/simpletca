@@ -9,4 +9,7 @@
 	<file>../../</file>
 
 	<exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>.testing</exclude-pattern>
+    <exclude-pattern>bin</exclude-pattern>
+    <exclude-pattern>public</exclude-pattern>
 </ruleset>

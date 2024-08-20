@@ -6,6 +6,7 @@ use Febis\SimpleTca\Data\TsConfig\FceGroup;
 use Febis\SimpleTca\Data\TsConfig\FceItem as TsConfigItem;
 use Febis\SimpleTca\Data\Typoscript\DataProcessorItem;
 use Febis\SimpleTca\Data\Typoscript\FceItem as TyposcriptItem;
+use Febis\SimpleTca\Exception\CacheInstanceException;
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\Exception\TyposcriptExistsException;
@@ -14,11 +15,15 @@ use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\Shortcut\DataProcessorInterface;
 use Febis\SimpleTca\TcaGenerator;
 use Febis\SimpleTca\Utility\TypoScriptHelper;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
+/**
+ * @TODO Refactor, split responsibilities into separate classes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class FceGenerator
 {
     protected final const CONTENT_TABLE = 'tt_content';
@@ -53,6 +58,9 @@ class FceGenerator
         'categories' => self::TABS['categories'] . self::FIELDS['categories']
     ];
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         protected string $extKey,
         protected string $identifier = '',
@@ -162,9 +170,9 @@ class FceGenerator
 
     /**
      * @throws NoIdentifierException
-     * @throws NoSuchCacheException
      * @throws TsConfigExistsException
      * @throws TyposcriptExistsException
+     * @throws CacheInstanceException
      */
     public function registerFCE(): void
     {
@@ -218,7 +226,8 @@ class FceGenerator
     }
 
     /**
-     * @throws TsConfigExistsException|NoSuchCacheException
+     * @throws TsConfigExistsException
+     * @throws CacheInstanceException
      */
     protected function generateTsConfig(): void
     {
@@ -238,7 +247,8 @@ class FceGenerator
     }
 
     /**
-     * @throws TyposcriptExistsException|NoSuchCacheException
+     * @throws TyposcriptExistsException
+     * @throws CacheInstanceException
      */
     protected function generateTyposcript(): void
     {
@@ -282,6 +292,7 @@ class FceGenerator
 
     /**
      * Function uses exit(0), because otherwise no output is generatedfce
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function debugRegisteringFCE(): void
     {

@@ -12,6 +12,8 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 /**
  * Currently attributes will only compared in first layer.
  * TODO: add recursively comparison for attributes to load default or overridden values
+ * TODO: refactor split into separate classes to maintain responsibilities
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
@@ -30,6 +32,8 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     protected array $unsetAttributes = [];
 
     protected ?string $label = null;
+
+    protected bool $exclude = true;
 
     public function __construct(
         protected ?string $identifier = null,
@@ -52,6 +56,13 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     public function withTablename(?string $tablename): static
     {
         $this->tablename = $tablename;
+
+        return $this;
+    }
+
+    public function withExclude(bool $exclude = true): static
+    {
+        $this->exclude = $exclude;
 
         return $this;
     }
@@ -110,10 +121,14 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         return [
             'label' => $this->label,
+            'exclude' => $this->exclude,
             'config' => []
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     protected function buildConfig(): array
     {
         $config = static::getDefaultProperties();
@@ -123,7 +138,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             [
                 ...static::toLowerCamelCase(static::getAllowedProperties()),
                 ...array_keys($this->additionalAttributes ?? [])
-            ]
+            ],
         );
 
         foreach ($mergedProperties as $property) {
@@ -173,7 +188,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             in_array(
                 static::toLowerCamelCase($match[1]),
                 static::toLowerCamelCase(static::getAllowedProperties()),
-                true
+                true,
             )
         ) {
             $property = self::toLowerCamelCase($match[1]);
@@ -200,7 +215,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             new Table([
                 $identifier => $this->overrideField ?? static::getSqlDefinition()
             ]),
-            $this->tablename
+            $this->tablename,
         );
     }
 
@@ -220,7 +235,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         $filtered = array_filter(
             static::getAllowedProperties(),
-            static fn($property) => static::toLowerCamelCase($property) === $lcc
+            static fn($property) => static::toLowerCamelCase($property) === $lcc,
         );
 
         return false === empty($filtered) ? reset($filtered) : null;
@@ -245,7 +260,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
     public function offsetUnset(mixed $offset): void
     {
-        if($this->offsetExists($offset)) {
+        if ($this->offsetExists($offset)) {
             $this->$offset = null;
         }
     }

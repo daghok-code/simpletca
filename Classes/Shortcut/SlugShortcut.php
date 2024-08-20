@@ -43,14 +43,14 @@ class SlugShortcut extends AbstractShortcut
     {
         return new Field(
             'VARCHAR(255)',
-            ''
+            '',
         );
     }
 
     public function __construct(
         ?string $identifier = null,
         protected ?string $size = null,
-        protected ?string $eval = null
+        protected ?string $eval = null,
     ) {
         parent::__construct($identifier);
     }

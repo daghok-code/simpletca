@@ -30,13 +30,13 @@ class CheckboxShortcut extends AbstractShortcut
     {
         return new Field(
             'TINYINT',
-            0
+            0,
         );
     }
 
     public function __construct(
         ?string $identifier = null,
-        ?string $renderType = null
+        ?string $renderType = null,
     ) {
         $this->renderType = $renderType;
         parent::__construct($identifier);

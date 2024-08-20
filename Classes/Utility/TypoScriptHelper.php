@@ -10,18 +10,26 @@ class TypoScriptHelper
     /**
      * Transforms a php object into a readable typoscript notation
      */
-    public static function objectToTextualRepresentation(string $key, array $tsObject, int $prevIndent = 0): string
-    {
+    public static function objectToTextualRepresentation(
+        string $key,
+        array $tsObject,
+        int $prevIndent = 0,
+    ): string {
         $currentIndent = $prevIndent + self::TAB_SIZE_TYPOSCRIPT;
         $parts = [];
         $parts[] = self::indent($prevIndent) . $key . ' {';
 
         foreach ($tsObject as $item) {
+            if (is_string($item)) {
+                $parts[] = self::indent($currentIndent) . $item;
+                continue;
+            }
+
             $key = $item[0];
             $value = $item[1];
 
-            if (is_array($value) && count($value) === 2) {
-                $parts[] = self::objectToTextualRepresentation($item[0], $item[1], $currentIndent);
+            if (is_array($value)) {
+                $parts[] = self::objectToTextualRepresentation($key, $value, $currentIndent);
             } else {
                 $parts[] = self::indent($currentIndent) . $key . ' = ' . $value;
             }

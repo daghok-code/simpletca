@@ -6,9 +6,9 @@ class Field
 {
     public function __construct(
         public $type,
-        public $default = null
-    )
-    {}
+        public $default = null,
+    ) {
+    }
 
     public function getSQLDefaultValue(): string
     {

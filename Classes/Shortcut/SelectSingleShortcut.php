@@ -29,14 +29,14 @@ class SelectSingleShortcut extends AbstractShortcut
     {
         return new Field(
             'VARCHAR(255)',
-            ''
+            '',
         );
     }
 
     public function __construct(
         ?string $identifier = null,
         protected ?array $items = null,
-        protected ?string $renderType = null
+        protected ?string $renderType = null,
     ) {
         $this->renderType = $this->renderType ?? 'selectSingle';
         parent::__construct($identifier);

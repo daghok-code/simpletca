@@ -9,7 +9,7 @@ class TsConfigExistsException extends SimpleTcaException
         string $identifier,
         bool $group,
         int $code = 1687957187,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         $message = "The TsConfig definition for " .
             ($group ? "content element group " : "") .

@@ -10,7 +10,7 @@ class Palettes implements ComponentInterface
 
     public function __construct(
         private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        private readonly bool $activateEnableColumns,
     ) {
         $this->addBasePalettes();
     }
@@ -25,14 +25,14 @@ class Palettes implements ComponentInterface
         if ($this->activateLanguage) {
             $this->palettes = array_merge(
                 $this->palettes,
-                $this->getLanguagePalettes()
+                $this->getLanguagePalettes(),
             );
         }
 
         if ($this->activateEnableColumns) {
             $this->palettes = array_merge(
                 $this->palettes,
-                $this->getEnableColumnsPalette()
+                $this->getEnableColumnsPalette(),
             );
         }
     }

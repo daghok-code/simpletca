@@ -46,7 +46,7 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
     {
         return new Field(
             'INT',
-            0
+            0,
         );
     }
 
@@ -59,8 +59,8 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
     {
         return [
             'references' => [
-               'table' => 'tt_content',
-               'fieldName' => $fieldName,
+                'table' => 'tt_content',
+                'fieldName' => $fieldName,
             ],
             'as' => $fieldName
         ];
@@ -105,7 +105,7 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
         return ExtensionManagementUtility::getFileFieldTCAConfig(
             $this->fieldName,
             parent::buildConfig(),
-            $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
         );
     }
 }

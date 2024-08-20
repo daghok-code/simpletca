@@ -29,12 +29,12 @@ class LinkShortcut extends AbstractShortcut
     {
         return new Field(
             'VARCHAR(255)',
-            ''
+            '',
         );
     }
 
     public function __construct(
-        ?string $identifier = null
+        ?string $identifier = null,
     ) {
         parent::__construct($identifier);
     }

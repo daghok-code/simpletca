@@ -37,7 +37,7 @@ class RelationMMShortcut extends AbstractShortcut
     {
         return new Field(
             'INT',
-            0
+            0,
         );
     }
 
@@ -48,7 +48,7 @@ class RelationMMShortcut extends AbstractShortcut
             new Table([
                 'parent' => new Field('INT', 0)
             ]),
-            $this->allowed
+            $this->allowed,
         );
     }
 
@@ -59,7 +59,7 @@ class RelationMMShortcut extends AbstractShortcut
         protected ?string $mMOppositeField = null,
         protected ?int $size = null,
         protected ?int $minitems = null,
-        protected ?int $maxitems = null
+        protected ?int $maxitems = null,
     ) {
         parent::__construct($identifier);
     }

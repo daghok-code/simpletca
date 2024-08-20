@@ -16,7 +16,7 @@ class FceItem
     public function __construct(
         protected string $identifier,
         protected ?string $templateName = null,
-        protected string $baseElement = TyposcriptData::BASE_DEFAULT,
+        protected string $baseElement = TyposcriptDataHandling::BASE_DEFAULT,
         protected array $dataProcessors = [],
     ) {
         $this->templateName = $this->templateName ?? TypoScriptHelper::snakeToCamel($this->identifier);
@@ -33,7 +33,7 @@ class FceItem
         if (false === empty($this->dataProcessors)) {
             $counter = 0;
             $dataProcessors = [];
-            foreach($this->dataProcessors as $dataProcessor) {
+            foreach ($this->dataProcessors as $dataProcessor) {
                 $counter += TypoScriptHelper::TYPOSCRIPT_COUNTING;
                 $dataProcessors[] = [$counter, $dataProcessor->getProcessorClass()];
                 $dataProcessors[] = [$counter, $dataProcessor->getConfig()];

@@ -2,6 +2,8 @@
 
 namespace Febis\SimpleTca\Data\TsConfig;
 
+use Febis\SimpleTca\Utility\TypoScriptHelper;
+
 class FceItem
 {
     public function __construct(
@@ -19,21 +21,38 @@ class FceItem
 
     public function generateTsConfig(): string
     {
-        return "
-            mod.wizards.newContentElement.wizardItems." . $this->groupIdentifier . " {
-              elements {
-                " . $this->identifier . " {
-                  iconIdentifier = " . $this->iconIdentifier . "
-                  title = " . $this->getTitle() . "
-                  tt_content_defValues {
-                    CType = " . $this->identifier . "
-                  }
-                }
-              }
-
-              show := addToList(" . $this->identifier . ")
-            }
-        ";
+        $objectIdentifier = sprintf('mod.wizards.newContentElement.wizardItems.%s', $this->groupIdentifier);
+        $object = [
+            [
+                'elements',
+                [
+                    [
+                        $this->identifier,
+                        [
+                            [
+                                'iconIdentifier',
+                                $this->iconIdentifier,
+                            ],
+                            [
+                                'title',
+                                $this->getTitle(),
+                            ],
+                            [
+                                'tt_content_defValues',
+                                [
+                                    [
+                                        'CType',
+                                        $this->identifier,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            sprintf('show := addToList(%s)', $this->identifier),
+        ];
+        return TypoScriptHelper::objectToTextualRepresentation($objectIdentifier, $object);
     }
 
     public static function __set_state(array $data)

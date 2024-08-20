@@ -1,4 +1,38 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    simpletca_tsconfig.cache:
+        class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
+        # We can not use CacheManager, as it can not be
+        # injected/instantiated during ext_localconf.php loading
+        # factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+        # therefore we use the static Bootstrap::createCache factory instead.
+        factory: [ 'TYPO3\CMS\Core\Core\Bootstrap', 'createCache' ]
+        arguments: [ 'simpletca_tsconfig' ]
+
+    simpletca_typoscript.cache:
+        class: TYPO3\CMS\Core\Cache\Frontend\PhpFrontend
+        # We can not use CacheManager, as it can not be
+        # injected/instantiated during ext_localconf.php loading
+        # factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+        # therefore we use the static Bootstrap::createCache factory instead.
+        factory: [ 'TYPO3\CMS\Core\Core\Bootstrap', 'createCache' ]
+        arguments: [ 'simpletca_typoscript' ]
+
+    Febis\SimpleTca\Data\TsConfig\TsConfigData:
+        arguments: [ '@simpletca_tsconfig.cache' ]
+        public: true
+
+    Febis\SimpleTca\Data\TsConfig\TyposcriptData:
+        arguments: [ '@simpletca_typoscript.cache' ]
+        public: true
+
+    Febis\SimpleTca\Utility\CallStackExtractor:
+        public: true
+
     Febis\SimpleTca\EventListener\TcaGeneratorTableDefinitionUpdate:
             -   name: event.listener
                 identifier: 'simpletca-tcagenerator-update-tables'
@@ -18,7 +52,3 @@ services:
                 name: event.listener
                 identifier: 'simpletca-fcegenerator-generate-tsconfig'
                 event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
-    cache.simpletca_tsconfig:
-        class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
-        factory: [ '@TYPO3\CMS\Core\Cache\CacheManager', 'getCache' ]
-        arguments: [ 'simpletca_tsconfig' ]

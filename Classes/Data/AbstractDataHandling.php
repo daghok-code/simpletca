@@ -1,0 +1,60 @@
+<?php
+
+namespace Febis\SimpleTca\Data;
+
+use Febis\SimpleTca\Data\Cacheable\CacheableInterface;
+use Febis\SimpleTca\Debug\DebugAwareInterface;
+use Febis\SimpleTca\Exception\CacheInstanceException;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+
+abstract class AbstractDataHandling
+{
+    protected CacheableInterface $data;
+
+    protected CacheHandler $cacheHandler;
+
+    abstract protected function debugOutput(): mixed;
+
+    abstract protected function initData(): void;
+
+    /**
+     * @throws CacheInstanceException
+     */
+    public function __construct(string $cacheIdentifier, PhpFrontend $cache = null)
+    {
+        $this->cacheHandler = CacheHandler::create($cacheIdentifier, $cache);
+        $this->initData();
+        $this->readData();
+    }
+
+    public function getTimestamp(): int
+    {
+        return $this->data->timestamp;
+    }
+
+    /**
+     * @throws CacheInstanceException
+     */
+    protected function writeData(): void
+    {
+        if ($this->data instanceof DebugAwareInterface) {
+            $this->data->addDebugMessage(PHP_EOL . $this->debugOutput() . PHP_EOL, static::class);
+        }
+
+        $this->data->timestamp = time();
+
+        $this->cacheHandler->createCacheFile($this->data);
+    }
+
+    /**
+     * @throws CacheInstanceException
+     */
+    protected function readData(): void
+    {
+        $cacheable = $this->cacheHandler->readCacheFile();
+
+        if ($cacheable) {
+            $this->data = $cacheable;
+        }
+    }
+}

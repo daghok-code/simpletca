@@ -72,7 +72,7 @@ class CropColumnGenerator
 
     protected function generateDisabledConfig(array $disabledRatios): array
     {
-        return array_map(static fn($ratio) => ['disabled' => true], array_flip($disabledRatios));
+        return array_map(static fn() => ['disabled' => true], array_flip($disabledRatios));
     }
 
     protected static function getAvailableRatios(): array
@@ -82,7 +82,7 @@ class CropColumnGenerator
             BackendUtility::getPagesTSconfig(1)['TCEFORM.']['sys_file_reference.']['crop.']['config.']['cropVariants.']
             ?? [];
         foreach ($variants as $variant) {
-            foreach ($variant['allowedAspectRatios.'] as $aspectRatio => $_) {
+            foreach (array_keys($variant['allowedAspectRatios.']) as $aspectRatio) {
                 $ratios[] = trim($aspectRatio, '.');
             }
         }

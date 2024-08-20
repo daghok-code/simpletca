@@ -3,8 +3,10 @@
 namespace Febis\SimpleTca\Utility;
 
 use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\DriverManager;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -50,13 +52,13 @@ class CallStackExtractor implements SingletonInterface
      */
     protected function filterStacktrace(string $pattern): array
     {
-        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);;
+        $stackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);
 
         foreach ($stackTrace as $traceItem) {
             preg_match(
                 $pattern,
                 $traceItem['file'] ?? '',
-                $fileMatch
+                $fileMatch,
             );
 
             if (!empty($fileMatch)) {
@@ -74,9 +76,14 @@ class CallStackExtractor implements SingletonInterface
     protected function getTableList(): array
     {
         if (null === $this->tableList) {
-            $this->tableList = GeneralUtility::makeInstance(ConnectionPool::class)
-                ->getQueryBuilderForTable('tt_content')
-                ->getConnection()
+            if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 12) {
+                $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tt_content');
+            } else {
+                $connectionParams = $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default'];
+                $connection = DriverManager::getConnection($connectionParams);
+            }
+
+            $this->tableList = $connection
                 ->prepare("SHOW TABLES;")
                 ->executeQuery()
                 ->fetchFirstColumn();
@@ -93,10 +100,13 @@ class CallStackExtractor implements SingletonInterface
             return $tablename;
         }
 
-        $partialMatch = array_filter($this->tableList, static function ($realTablename) use ($tablename) {
-            preg_match("/^$realTablename.*$/", $tablename, $match);
-            return isset($match[0]);
-        });
+        $partialMatch = array_filter(
+            $this->tableList,
+            static function ($realTablename) use ($tablename) {
+                preg_match("/^$realTablename.*$/", $tablename, $match);
+                return isset($match[0]);
+            },
+        );
 
         return reset($partialMatch) ?: $tablename;
     }

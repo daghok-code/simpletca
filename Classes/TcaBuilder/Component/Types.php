@@ -11,7 +11,7 @@ class Types implements ComponentInterface
 
     public function __construct(
         private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        private readonly bool $activateEnableColumns,
     ) {
     }
 
@@ -26,16 +26,16 @@ class Types implements ComponentInterface
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                     title,' . ($this->defaultTypeFields) ? $this->defaultTypeFields . ',' : '';
 
-                    if ($this->activateLanguage) {
-                        $defaultType .= $this->getLanguageString();
-                    }
+        if ($this->activateLanguage) {
+            $defaultType .= $this->getLanguageString();
+        }
 
-                    if ($this->activateEnableColumns) {
-                        $defaultType .= $this->getEnableColumnsString();
-                    }
+        if ($this->activateEnableColumns) {
+            $defaultType .= $this->getEnableColumnsString();
+        }
 
-                    return [
-                        '0' => [
+        return [
+            '0' => [
                 'showitem' => $defaultType,
             ],
         ];

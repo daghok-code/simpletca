@@ -50,3 +50,9 @@ class CustomShortcut extends AbstractShortcut
     }
 }
 ```
+
+
+### Debug Outputs
+You can set environment variable "SIMPLETCA_DEBUG=1" to enable debug outputs.
+
+- adds fully generated tsconfig and typoscript to var/cache/code/simpletca_[tsconfig|typoscript]/....php

@@ -18,7 +18,7 @@ class TcaGeneratorBuildTca
         $fullTca = $event->getTca();
         foreach ($fullTca as $tableName => $tca) {
             foreach ($tca['columns'] ?? [] as $columnName => $column) {
-                if($column instanceof TcaShortcutInterface) {
+                if ($column instanceof TcaShortcutInterface) {
                     $fullTca[$tableName]['columns'][$columnName] = $column->build();
                 }
             }

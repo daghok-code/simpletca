@@ -19,7 +19,7 @@ class TcaGeneratorTableDefinitionUpdate
             [
                 ...$event->getSqlData(),
                 ...TcaGenerator::getTcaDefinitionDataInstance()->getSqlArray()
-            ]
+            ],
         );
     }
 }

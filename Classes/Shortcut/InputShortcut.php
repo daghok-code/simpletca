@@ -31,14 +31,14 @@ class InputShortcut extends AbstractShortcut
     {
         return new Field(
             'VARCHAR(255)',
-            ''
+            '',
         );
     }
 
     public function __construct(
         ?string $identifier = null,
         protected ?string $eval = null,
-        protected ?string $renderType = null
+        protected ?string $renderType = null,
     ) {
         parent::__construct($identifier);
     }

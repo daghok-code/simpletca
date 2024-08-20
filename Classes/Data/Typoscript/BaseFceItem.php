@@ -13,7 +13,7 @@ class BaseFceItem
 
     public function getObjectName(): string
     {
-        return sprintf('%s.%s', TyposcriptData::BASE_PREFIX, $this->extKey);
+        return sprintf('%s.%s', TyposcriptDataHandling::BASE_PREFIX, $this->extKey);
     }
 
     public function generateTyposcript(): string

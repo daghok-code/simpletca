@@ -12,7 +12,7 @@ class Table
      */
     public function __construct(array $fields)
     {
-        foreach($fields as $identifier => $field) {
+        foreach ($fields as $identifier => $field) {
             $this->addField($field, $identifier);
         }
     }
@@ -24,7 +24,7 @@ class Table
 
     public function addField(Field $field, string $identifier): static
     {
-        if($this->hasField($identifier)) {
+        if ($this->hasField($identifier)) {
             $this->replaceField($field, $identifier);
         } else {
             $this->fields[$identifier] = $field;
@@ -68,7 +68,7 @@ class Table
 
     public function mergeWithOverrideTable(Table $toAppendWithPrio): static
     {
-        foreach($toAppendWithPrio->getFields() as $fieldIdentifier => $field) {
+        foreach ($toAppendWithPrio->getFields() as $fieldIdentifier => $field) {
             $this->addField($field, $fieldIdentifier);
         }
 
