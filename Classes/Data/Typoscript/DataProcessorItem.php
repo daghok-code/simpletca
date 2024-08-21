@@ -22,6 +22,6 @@ class DataProcessorItem
 
     public static function __set_state(array $data)
     {
-        return new static(...$data);
+        return new self(...$data);
     }
 }

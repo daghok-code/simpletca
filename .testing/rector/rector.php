@@ -20,10 +20,10 @@ return RectorConfig::configure()
     ->withPHPStanConfigs([Typo3Option::PHPSTAN_FOR_RECTOR_PATH])
     ->withSkip(
         [
-            __DIR__ . '/vendor/*',
-            __DIR__ . '/.testing/*',
-            __DIR__ . '/public/*',
-            __DIR__ . '/bin/*',
+            'vendor',
+            '.testing',
+            'public',
+            'bin',
             NameImportingPostRector::class => [
                 'ext_localconf.php',
                 'ext_tables.php',

@@ -3,5 +3,6 @@
 
 vendor/
 public/
+bin/
 
 composer.lock

@@ -24,7 +24,6 @@ class CropColumnGenerator
     /**
      * Set Crop Variants for which aspect ratios will be disabled next
      * @param string[] $cropVariants
-     * @return $this
      */
     public function forCropVariants(...$cropVariants): static
     {
@@ -35,7 +34,6 @@ class CropColumnGenerator
     /**
      * disable aspect ratios for defined crop variants
      * @param string[] $disabledRatios
-     * @return CropColumnGenerator
      */
     public function disableAspectRatios(...$disabledRatios): static
     {
@@ -53,7 +51,6 @@ class CropColumnGenerator
     /**
      * disable every else aspect ratios for defined crop variants
      * @param string[] $enabledRatios
-     * @return CropColumnGenerator
      */
     public function enableAspectRatios(...$enabledRatios): static
     {

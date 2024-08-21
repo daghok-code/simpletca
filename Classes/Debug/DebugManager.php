@@ -29,6 +29,7 @@ class DebugManager implements DebugInterface
 
     public static function __set_state(array $state)
     {
+        /** @phpstan-ignore-next-line */
         return null;
     }
 }

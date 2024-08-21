@@ -2,14 +2,14 @@
 
 namespace Febis\SimpleTca\Data;
 
-use Febis\SimpleTca\Data\Cacheable\CacheableInterface;
+use Febis\SimpleTca\Data\Cacheable\BaseCacheable;
 use Febis\SimpleTca\Debug\DebugAwareInterface;
 use Febis\SimpleTca\Exception\CacheInstanceException;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
 abstract class AbstractDataHandling
 {
-    protected CacheableInterface $data;
+    protected BaseCacheable $data;
 
     protected CacheHandler $cacheHandler;
 
@@ -53,7 +53,7 @@ abstract class AbstractDataHandling
     {
         $cacheable = $this->cacheHandler->readCacheFile();
 
-        if ($cacheable) {
+        if ($cacheable instanceof BaseCacheable) {
             $this->data = $cacheable;
         }
     }

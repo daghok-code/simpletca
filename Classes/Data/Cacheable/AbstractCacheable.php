@@ -16,6 +16,7 @@ abstract class AbstractCacheable implements CacheableInterface, DebugAwareInterf
 
     public static function __set_state(array $data)
     {
+        /** @phpstan-ignore-next-line */
         $newObj = new static();
 
         if (isset($data['debug'])) {

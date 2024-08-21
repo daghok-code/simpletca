@@ -27,7 +27,7 @@ class TcaDefinitionData implements SingletonInterface
 
     public function removeTable(string $identifier): static
     {
-        if (null !== $this->tables[$identifier] ?? null) {
+        if (isset($this->tables[$identifier])) {
             unset($this->tables[$identifier]);
         }
 

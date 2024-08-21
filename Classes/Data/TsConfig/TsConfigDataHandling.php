@@ -3,7 +3,7 @@
 namespace Febis\SimpleTca\Data\TsConfig;
 
 use Febis\SimpleTca\Data\AbstractDataHandling;
-use Febis\SimpleTca\Data\Cacheable\CacheableInterface;
+use Febis\SimpleTca\Data\Cacheable\BaseCacheable;
 use Febis\SimpleTca\Data\Cacheable\TsConfigCacheable;
 use Febis\SimpleTca\Exception\CacheInstanceException;
 use Febis\SimpleTca\Exception\TsConfigExistsException;
@@ -12,7 +12,7 @@ use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 class TsConfigDataHandling extends AbstractDataHandling
 {
     /** @var TsConfigCacheable $data */
-    protected CacheableInterface $data;
+    protected BaseCacheable $data;
 
     public function __construct(PhpFrontend $cache = null)
     {

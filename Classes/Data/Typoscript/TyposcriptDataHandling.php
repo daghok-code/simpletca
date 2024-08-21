@@ -3,7 +3,7 @@
 namespace Febis\SimpleTca\Data\Typoscript;
 
 use Febis\SimpleTca\Data\AbstractDataHandling;
-use Febis\SimpleTca\Data\Cacheable\CacheableInterface;
+use Febis\SimpleTca\Data\Cacheable\BaseCacheable;
 use Febis\SimpleTca\Data\Cacheable\TyposcriptCacheable;
 use Febis\SimpleTca\Exception\CacheInstanceException;
 use Febis\SimpleTca\Exception\TyposcriptExistsException;
@@ -15,7 +15,7 @@ class TyposcriptDataHandling extends AbstractDataHandling
     public const BASE_DEFAULT = self::BASE_PREFIX . '._default';
 
     /** @var TyposcriptCacheable $data */
-    protected CacheableInterface $data;
+    protected BaseCacheable $data;
 
     public function __construct(PhpFrontend $cache = null)
     {
@@ -34,7 +34,8 @@ class TyposcriptDataHandling extends AbstractDataHandling
 
     public function getBaseFceItemFor(string $extKey): ?string
     {
-        return $this->data->baseFceItems[$extKey]?->getObjectName() ?? null;
+        /** @phpstan-ignore-next-line */
+        return $this->data->baseFceItems[$extKey]?->getObjectName();
     }
 
     public function hasBaseFceItemFor(string $extKey): bool

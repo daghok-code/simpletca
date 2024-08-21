@@ -24,7 +24,7 @@ class Types implements ComponentInterface
     {
         $defaultType = '
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    title,' . ($this->defaultTypeFields) ? $this->defaultTypeFields . ',' : '';
+                    title,' . ($this->defaultTypeFields ? ($this->defaultTypeFields . ',') : '');
 
         if ($this->activateLanguage) {
             $defaultType .= $this->getLanguageString();

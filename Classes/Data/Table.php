@@ -42,7 +42,7 @@ class Table
 
     public function removeField(string $identifier): static
     {
-        if (null !== $this->fields[$identifier] ?? null) {
+        if (isset($this->fields[$identifier])) {
             unset($this->fields[$identifier]);
         }
 
