@@ -3,6 +3,7 @@
 namespace Febis\SimpleTca\Data\Typoscript;
 
 use Febis\SimpleTca\Utility\TypoScriptHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FceItem
 {
@@ -19,7 +20,7 @@ class FceItem
         protected string $baseElement = TyposcriptDataHandling::BASE_DEFAULT,
         protected array $dataProcessors = [],
     ) {
-        $this->templateName = $this->templateName ?? TypoScriptHelper::snakeToCamel($this->identifier);
+        $this->templateName ??= GeneralUtility::underscoredToUpperCamelCase($this->identifier);
     }
 
     public function generateTyposcript(): string
@@ -30,7 +31,7 @@ class FceItem
             ['templateName', $this->templateName]
         ];
 
-        if (false === empty($this->dataProcessors)) {
+        if ($this->dataProcessors !== []) {
             $counter = 0;
             $dataProcessors = [];
             foreach ($this->dataProcessors as $dataProcessor) {
@@ -38,6 +39,7 @@ class FceItem
                 $dataProcessors[] = [$counter, $dataProcessor->getProcessorClass()];
                 $dataProcessors[] = [$counter, $dataProcessor->getConfig()];
             }
+
             $tsObject[] = ['dataProcessing', $dataProcessors];
         }
 
@@ -45,7 +47,7 @@ class FceItem
         $typoscript[] = sprintf("%s =< %s", $tsObjectName, $this->baseElement);
         $typoscript[] = TypoScriptHelper::objectToTextualRepresentation($tsObjectName, $tsObject);
 
-        return join("\n", $typoscript);
+        return implode("\n", $typoscript);
     }
 
     public static function __set_state(array $data)

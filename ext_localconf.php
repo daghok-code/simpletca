@@ -6,7 +6,7 @@ use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
 $cacheConfiguration = [
     'frontend' => PhpFrontend::class,

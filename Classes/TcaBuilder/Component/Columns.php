@@ -8,6 +8,7 @@ use Febis\SimpleTca\TcaGenerator;
 class Columns implements ComponentInterface
 {
     public ?array $overrideDefaultColumns = null;
+
     protected array $columns = [];
 
     public function __construct(
@@ -42,6 +43,7 @@ class Columns implements ComponentInterface
                 $this->getEnableColumns(),
             );
         }
+
         if ($this->activateLanguage) {
             $this->columns = array_merge(
                 $this->columns,
@@ -71,7 +73,6 @@ class Columns implements ComponentInterface
                     'items' => [
                         [
                             0 => '',
-                            1 => '',
                             'invertStateDisplay' => true,
                         ],
                     ],
@@ -172,12 +173,15 @@ class Columns implements ComponentInterface
                 // no need to translate label because already done at this point
                 continue;
             }
+
             if (!isset($column['label'])) {
                 continue;
             }
-            if (str_contains($column['label'], 'LLL:')) {
+
+            if (str_contains((string) $column['label'], 'LLL:')) {
                 continue;
             }
+
             $this->columns[$key]['label'] = TcaGenerator::translate($this->columns[$key]['label']);
         }
     }

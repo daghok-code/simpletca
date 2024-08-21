@@ -8,11 +8,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Control implements ComponentInterface
 {
     public string $label = 'title';
+
     public bool $hideTable = false;
+
     public bool $ignorePageTypeRestriction = false;
+
     public bool $readOnly = false;
+
     public bool $adminOnly = false;
+
     public string $icon = '';
+
     public string $searchFields = 'title';
 
     public function __construct(

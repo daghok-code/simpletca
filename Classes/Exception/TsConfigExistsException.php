@@ -13,7 +13,7 @@ class TsConfigExistsException extends SimpleTcaException
     ) {
         $message = "The TsConfig definition for " .
             ($group ? "content element group " : "") .
-            "\"$identifier\" already exists.
+            "\"{$identifier}\" already exists.
             If you want to overwrite this configuration, you have to set the \$override parameter to true";
         parent::__construct($message, $code, $previous);
     }

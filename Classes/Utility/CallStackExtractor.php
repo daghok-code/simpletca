@@ -103,7 +103,7 @@ class CallStackExtractor implements SingletonInterface
         $partialMatch = array_filter(
             $this->tableList,
             static function ($realTablename) use ($tablename) {
-                preg_match("/^$realTablename.*$/", $tablename, $match);
+                preg_match(sprintf('/^%s.*$/', $realTablename), $tablename, $match);
                 return isset($match[0]);
             },
         );

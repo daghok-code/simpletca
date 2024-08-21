@@ -8,6 +8,7 @@ use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Currently attributes will only compared in first layer.
@@ -85,10 +86,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $this;
     }
 
-    /**
-     * @param Field|null $overrideField
-     * @return $this
-     */
     public function overrideSqlDefinition(?Field $overrideField): static
     {
         $this->overrideField = $overrideField;
@@ -221,14 +218,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
     protected static function toLowerCamelCase(array | string $str): array | string
     {
-        $separators = ' _-';
-        $separatorsRegex = '\s\-_';
-
         if (is_array($str)) {
-            return array_map(static::class . '::toLowerCamelCase', $str);
+            return array_map(GeneralUtility::underscoredToLowerCamelCase(...), $str);
         }
 
-        return lcfirst(preg_replace("/[$separatorsRegex]+/", '', ucwords($str, $separators)));
+        return GeneralUtility::underscoredToLowerCamelCase($str);
     }
 
     protected static function getAllowedPropertyByLCC($lcc): ?string
@@ -238,7 +232,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             static fn($property) => static::toLowerCamelCase($property) === $lcc,
         );
 
-        return false === empty($filtered) ? reset($filtered) : null;
+        return $filtered !== [] ? reset($filtered) : null;
     }
 
     public function offsetExists(mixed $offset): bool

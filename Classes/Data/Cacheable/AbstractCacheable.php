@@ -26,6 +26,7 @@ abstract class AbstractCacheable implements CacheableInterface, DebugAwareInterf
         foreach ($data as $propKey => $propValue) {
             $newObj->{$propKey} = $propValue;
         }
+
         return $newObj;
     }
 }

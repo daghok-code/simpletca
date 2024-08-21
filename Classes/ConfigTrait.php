@@ -15,7 +15,7 @@ trait ConfigTrait
      */
     public static function getConfig(): Config
     {
-        if (static::$config === null) {
+        if (!static::$config instanceof Config) {
             static::$config = GeneralUtility::makeInstance(Config::class);
         }
 

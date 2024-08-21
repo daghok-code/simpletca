@@ -39,11 +39,17 @@ use Febis\SimpleTca\TcaGenerator;
 class TcaBuilder
 {
     public bool $activateLanguage = true;
+
     public bool $activateSorting = true;
+
     public bool $activateEnableColumns = true;
+
     public Control $ctrl;
+
     public Columns $columns;
+
     public Palettes $palettes;
+
     public Types $types;
 
     public function __construct(protected string $table)

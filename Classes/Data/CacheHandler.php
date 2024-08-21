@@ -43,7 +43,7 @@ class CacheHandler
      */
     protected function initCache(): void
     {
-        if (null !== $this->codeCache) {
+        if ($this->codeCache instanceof PhpFrontend) {
             return;
         }
 
@@ -91,9 +91,10 @@ class CacheHandler
      */
     protected function getCodeCache(): PhpFrontend
     {
-        if (null === $this->codeCache) {
+        if (!$this->codeCache instanceof PhpFrontend) {
             $this->initCache();
         }
+
         return $this->codeCache;
     }
 
@@ -115,8 +116,8 @@ class CacheHandler
                 . var_export($data, true)
                 . ';',
             );
-        } catch (InvalidDataException $e) {
-            throw new CacheInstanceException($e, 1723718256);
+        } catch (InvalidDataException $invalidDataException) {
+            throw new CacheInstanceException($invalidDataException, 1723718256);
         }
     }
 

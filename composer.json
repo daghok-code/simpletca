@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "typo3/minimal": "^11 || ^12",
-        "helhum/dotenv-connector": "^3.0"
+        "helhum/dotenv-connector": "^3.0",
+        "typo3/minimal": "^12"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.43",

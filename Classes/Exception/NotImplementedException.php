@@ -10,7 +10,8 @@ class NotImplementedException extends SimpleTcaException
         int $code = 1672916415,
         ?\Throwable $previous = null,
     ) {
-        $message = "The method" . ($methodName !== '' ? " \"$methodName\"" : "") . " is not implemented yet.";
+        $methodName = $methodName !== '' ? sprintf('"%s"', $methodName) : '';
+        $message = sprintf('The method %s is not implemented yet.', $methodName);
         parent::__construct($message, $code, $previous);
     }
 }

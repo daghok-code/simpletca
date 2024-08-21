@@ -7,6 +7,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 class CropColumnGenerator
 {
     protected array $cropVariants = [];
+
     protected array $cropConfig = [
         'config' => [
             'cropVariants' => [
@@ -60,7 +61,6 @@ class CropColumnGenerator
 
     /**
      * Returns the crop column definition with disabled aspect ratios
-     * @return array
      */
     public function build(): array
     {

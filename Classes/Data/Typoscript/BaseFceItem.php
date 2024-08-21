@@ -29,7 +29,7 @@ class BaseFceItem
         $typoscript[] = sprintf("%s < lib.contentElement", $this->getObjectName());
         $typoscript[] = TypoScriptHelper::objectToTextualRepresentation($this->getObjectName(), $tsObject);
 
-        return join("\n", $typoscript);
+        return implode("\n", $typoscript);
     }
 
     public static function __set_state(array $data)

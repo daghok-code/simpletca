@@ -27,10 +27,12 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 class FceGenerator
 {
     protected final const CONTENT_TABLE = 'tt_content';
+
     protected final const FIELDS = [
         'rowDescription' => 'rowDescription,',
         'categories' => 'categories,'
     ];
+
     protected final const PALETTES = [
         'general' => '--palette--;;general,',
         'headers' => '--palette--;;headers,',
@@ -40,6 +42,7 @@ class FceGenerator
         'access' => '--palette--;;access,',
         'language' => '--palette--;;language,',
     ];
+
     protected final const TABS = [
         'general' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,',
         'appearance' => '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,',
@@ -49,6 +52,7 @@ class FceGenerator
         'language' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,',
         'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,'
     ];
+
     protected final const JOINED = [
         'generalPrepend' => self::TABS['general'] . self::PALETTES['general'] . self::PALETTES['headers'],
         'appearance' => self::TABS['appearance'] . self::PALETTES['frames'] . self::PALETTES['appearanceLinks'],
@@ -106,7 +110,6 @@ class FceGenerator
 
     /**
      * @param list<AbstractShortcut> $columns
-     * @return $this
      */
     public function withColumns(array $columns): static
     {
@@ -114,6 +117,7 @@ class FceGenerator
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
         return $this;
     }
 
@@ -287,6 +291,7 @@ class FceGenerator
                 TypoScriptHelper::transformFromTypedTyposcript($column->getDataProcessorConfig($fieldName)),
             );
         }
+
         return $dataProcessors;
     }
 
@@ -322,14 +327,12 @@ class FceGenerator
 
     protected function getLabel(): string
     {
-        if (false === empty($this->cTypeLabel) && str_starts_with($this->cTypeLabel, 'LLL:')) {
+        if (str_starts_with($this->cTypeLabel, 'LLL:')) {
             return $this->cTypeLabel;
+        } elseif ($this->cTypeLabel !== '') {
+            return static::getLocalizedLabel($this->cTypeLabel);
         } else {
-            if (false === empty($this->cTypeLabel)) {
-                return static::getLocalizedLabel($this->cTypeLabel);
-            } else {
-                return $this->identifier;
-            }
+            return $this->identifier;
         }
     }
 

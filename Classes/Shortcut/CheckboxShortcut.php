@@ -9,8 +9,6 @@ use Febis\SimpleTca\Data\Field;
  */
 class CheckboxShortcut extends AbstractShortcut
 {
-    protected ?string $renderType = null;
-
     protected static function getType(): string
     {
         return "check";
@@ -36,9 +34,8 @@ class CheckboxShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $identifier = null,
-        ?string $renderType = null,
+        protected ?string $renderType = null,
     ) {
-        $this->renderType = $renderType;
         parent::__construct($identifier);
     }
 

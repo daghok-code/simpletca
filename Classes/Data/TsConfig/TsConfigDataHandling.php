@@ -113,6 +113,6 @@ class TsConfigDataHandling extends AbstractDataHandling
             $tsConfig[] = $fce->generateTsConfig();
         }
 
-        return join("\n", $tsConfig);
+        return implode("\n", $tsConfig);
     }
 }

@@ -3,7 +3,6 @@
 namespace Febis\SimpleTca\Data;
 
 use Febis\SimpleTca\Data\Cacheable\BaseCacheable;
-use Febis\SimpleTca\Debug\DebugAwareInterface;
 use Febis\SimpleTca\Exception\CacheInstanceException;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
@@ -37,9 +36,7 @@ abstract class AbstractDataHandling
      */
     protected function writeData(): void
     {
-        if ($this->data instanceof DebugAwareInterface) {
-            $this->data->addDebugMessage(PHP_EOL . $this->debugOutput() . PHP_EOL, static::class);
-        }
+        $this->data->addDebugMessage(PHP_EOL . $this->debugOutput() . PHP_EOL, static::class);
 
         $this->data->timestamp = time();
 

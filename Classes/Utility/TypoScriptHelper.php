@@ -5,6 +5,7 @@ namespace Febis\SimpleTca\Utility;
 class TypoScriptHelper
 {
     public const TAB_SIZE_TYPOSCRIPT = 2;
+
     public const TYPOSCRIPT_COUNTING = 10;
 
     /**
@@ -37,7 +38,7 @@ class TypoScriptHelper
 
         $parts[] = self::indent($prevIndent) . '}';
 
-        return join("\n", $parts);
+        return implode("\n", $parts);
     }
 
     /**
@@ -66,13 +67,14 @@ class TypoScriptHelper
                     unset($value['__type']);
                 }
 
-                if (!empty($value)) {
+                if ($value !== []) {
                     $output[] = [$key, self::transformFromTypedTyposcript($value)];
                 }
             } else {
                 $output[] = [$key, $value];
             }
         }
+
         return $output;
     }
 }

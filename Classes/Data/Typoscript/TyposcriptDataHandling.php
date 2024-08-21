@@ -12,6 +12,7 @@ use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 class TyposcriptDataHandling extends AbstractDataHandling
 {
     public const BASE_PREFIX = 'lib.tx_simpletca.contentElement';
+
     public const BASE_DEFAULT = self::BASE_PREFIX . '._default';
 
     /** @var TyposcriptCacheable $data */
@@ -105,6 +106,6 @@ class TyposcriptDataHandling extends AbstractDataHandling
             $typoscript[] = $fceItem->generateTyposcript();
         }
 
-        return join("\n", $typoscript);
+        return implode("\n", $typoscript);
     }
 }

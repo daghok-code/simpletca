@@ -49,9 +49,6 @@ class ShortcutImplementation
      * Calls Shortcut Methods
      * @throws MethodNotDefinedException
      * @throws ShortcutNotAllowedException|CallstackExtractionException
-     * @return TcaShortcutInterface
-     * @param string $name
-     * @param array $arguments
      */
     public static function __callStatic(string $name, array $arguments): TcaShortcutInterface
     {
@@ -80,7 +77,7 @@ class ShortcutImplementation
         }
 
         throw new MethodNotDefinedException(
-            'Method "' . $name . '" is not defined for "' . __CLASS__ . '"',
+            'Method "' . $name . '" is not defined for "' . self::class . '"',
             1672744033,
         );
     }

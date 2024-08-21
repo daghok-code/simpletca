@@ -10,17 +10,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Config implements SingletonInterface
 {
     protected string $defaultFile = 'contentelements';
+
     /** @var TcaFileConfig[] $cachedTcaFileConfigs */
     protected array $cachedTcaFileConfigs = [];
+
     protected ?TcaFileConfig $currentTcaFileConfig = null;
 
     public function ll(): string
     {
-        return $this->llFullOverride ??
+        return $this->currentTcaFileConfig->llFullOverride ??
             'LLL:EXT:' .
             $this->getExtKey() .
             '/Resources/Private/Language/' .
-            ($this->llFile ?? $this->defaultFile) .
+            ($this->currentTcaFileConfig->llFile ?? $this->defaultFile) .
             '.xlf:';
     }
 

@@ -9,10 +9,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaFileConfig
 {
     public ?string $llFile = null;
+
     public ?string $llFullOverride = null; // eg. LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:
 
     protected string $extkey = '';
+
     protected string $tablename = '';
+
     protected bool $overrideTablename = false;
 
     public function getExtkey(): string
@@ -28,7 +31,7 @@ class TcaFileConfig
     public function setTablename(?string $tablename): void
     {
         $this->tablename = $tablename;
-        $this->overrideTablename = !empty($tablename);
+        $this->overrideTablename = $tablename !== null && $tablename !== '' && $tablename !== '0';
     }
 
     public function resetTablename(): void

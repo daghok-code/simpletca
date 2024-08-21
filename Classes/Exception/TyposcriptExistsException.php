@@ -10,7 +10,7 @@ class TyposcriptExistsException extends SimpleTcaException
         int $code = 1695302730,
         ?\Throwable $previous = null,
     ) {
-        $message = "The Typoscript definition for \"$identifier\" already exists.
+        $message = "The Typoscript definition for \"{$identifier}\" already exists.
             If you want to overwrite this configuration, you have to set the \$override parameter to true";
         parent::__construct($message, $code, $previous);
     }

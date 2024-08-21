@@ -23,6 +23,7 @@ class TcaGeneratorBuildTca
                 }
             }
         }
+
         $event->setTca($fullTca);
     }
 }

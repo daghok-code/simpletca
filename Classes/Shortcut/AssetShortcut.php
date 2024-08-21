@@ -11,11 +11,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class AssetShortcut extends AbstractShortcut
 {
-    protected ?int $minitems = null;
-    protected ?int $maxitems = null;
-    protected ?string $fieldName = null;
-    protected ?string $allowedFileExtensions = null;
-
     protected static function getType(): string
     {
         return "inline";
@@ -45,22 +40,15 @@ class AssetShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $identifier = null,
-        ?int $minitems = null,
-        ?int $maxitems = null,
-        ?string $fieldName = null,
-        ?string $allowedFileExtensions = null,
+        protected ?int $minitems = null,
+        protected ?int $maxitems = null,
+        protected ?string $fieldName = null,
+        protected ?string $allowedFileExtensions = null,
     ) {
-        $this->minitems = $minitems;
-        $this->maxitems = $maxitems;
-        $this->fieldName = $fieldName;
-        $this->allowedFileExtensions = $allowedFileExtensions;
         $this->withFieldName($this->fieldName);
         parent::__construct($identifier);
     }
 
-    /**
-     * @return $this
-     */
     public function withItemsRange(int $minitems = null, int $maxitems = null): static
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
@@ -72,18 +60,12 @@ class AssetShortcut extends AbstractShortcut
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function withFieldName($fieldName = null): static
     {
         $this->fieldName = $fieldName ?? 'assets';
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function withAllowedFileExtension($allowedFileExtensions = null): static
     {
         $this->allowedFileExtensions = $allowedFileExtensions;

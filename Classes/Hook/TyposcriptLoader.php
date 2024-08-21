@@ -13,7 +13,7 @@ class TyposcriptLoader
         $tstamp = TcaGenerator::getTyposcriptData()->getTimestamp();
 
         $rootLine = $hookParameters['rootLine'] ?? null;
-        if (!is_array($rootLine) || empty($rootLine)) {
+        if (null === $rootLine || [] === $rootLine) {
             return;
         }
 

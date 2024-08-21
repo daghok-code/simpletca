@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 class Types implements ComponentInterface
 {
     public string $defaultTypeFields = '';
+
     protected array $additionalTypes = [];
 
     public function __construct(
@@ -24,7 +25,7 @@ class Types implements ComponentInterface
     {
         $defaultType = '
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-                    title,' . ($this->defaultTypeFields ? ($this->defaultTypeFields . ',') : '');
+                    title,' . ($this->defaultTypeFields !== '' ? ($this->defaultTypeFields . ',') : '');
 
         if ($this->activateLanguage) {
             $defaultType .= $this->getLanguageString();

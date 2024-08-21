@@ -7,6 +7,7 @@ use Febis\SimpleTca\Data\Field;
 class PassthroughShortcut extends AbstractShortcut
 {
     protected ?string $eval = null;
+
     protected ?string $renderType = null;
 
     protected static function getType(): string
