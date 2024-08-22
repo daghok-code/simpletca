@@ -4,25 +4,24 @@ namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
 
+/**
+ * @method self withAllowedTypes($allowedTypes = null)
+ */
 class LinkShortcut extends AbstractShortcut
 {
     protected static function getType(): string
     {
-        return "input";
+        return "link";
     }
 
     protected static function getAllowedProperties(): array
     {
-        return [];
+        return ['allowedTypes'];
     }
 
     protected static function getDefaultProperties(): array
     {
-        return [
-            'eval' => 'trim',
-            'softref' => 'typolink',
-            'renderType' => 'inputLink'
-        ];
+        return [];
     }
 
     protected static function getSqlDefinition(): Field

@@ -21,3 +21,5 @@ parameters:
     - ../../vendor/
     - ../../bin/
     - ../../public/
+    - ../../Examples/
+    - ../../Documentation/

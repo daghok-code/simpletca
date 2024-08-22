@@ -8,7 +8,6 @@ use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Currently attributes will only compared in first layer.
@@ -54,6 +53,12 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $this;
     }
 
+    /**
+     * This method is marked internal as it normally shouldn't be called manually. The table is automatically fetched
+     * by the TCA filename where the Shortcut is used. E.g. if the file is 'TCA/Overrides/tt_content_example.php',
+     * then it tries to select table 'tt_content_example' and fallbacks (if not exists) to table 'tt_content'.
+     * @internal
+     */
     public function withTablename(?string $tablename): static
     {
         $this->tablename = $tablename;
@@ -117,9 +122,10 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     protected function buildContainer(): array
     {
         return [
+            '_identifier' => $this->identifier,
             'label' => $this->label,
             'exclude' => $this->exclude,
-            'config' => []
+            'config' => [],
         ];
     }
 
@@ -134,12 +140,12 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         $mergedProperties = array_unique(
             [
                 ...static::toLowerCamelCase(static::getAllowedProperties()),
-                ...array_keys($this->additionalAttributes ?? [])
+                ...array_keys($this->additionalAttributes ?? []),
             ],
         );
 
         foreach ($mergedProperties as $property) {
-            if ($property === static::getType()) {
+            if ($property === 'type') {
                 continue;
             }
 
@@ -180,8 +186,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         /** match 'with...'-Calls like withEval or withSize, but not for withType */
         preg_match('/\Awith([A-Z][A-z0-9]+)\z/', $name, $match);
 
+        if (false === isset($match[0], $match[1])) {
+            return $this;
+        }
+
         if (
-            isset($match[0], $match[1]) &&
             in_array(
                 static::toLowerCamelCase($match[1]),
                 static::toLowerCamelCase(static::getAllowedProperties()),
@@ -209,20 +218,29 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     protected function addFieldForDbGeneration(string $identifier): void
     {
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
-            new Table([
-                $identifier => $this->overrideField ?? static::getSqlDefinition()
-            ]),
+            new Table(
+                [
+                    $identifier => $this->overrideField ?? static::getSqlDefinition(),
+                ],
+            ),
             $this->tablename,
         );
     }
 
+    /**
+     * Important: Do NOT replace by GeneralUtility::underscoredToLowerCamelCase because that method doesn't respect
+     * strings that are already in lower camel case format
+     */
     protected static function toLowerCamelCase(array | string $str): array | string
     {
+        $separators = ' _-';
+        $separatorsRegex = '\s\-_';
+
         if (is_array($str)) {
-            return array_map(GeneralUtility::underscoredToLowerCamelCase(...), $str);
+            return array_map(static::toLowerCamelCase(...), $str);
         }
 
-        return GeneralUtility::underscoredToLowerCamelCase($str);
+        return lcfirst((string)preg_replace(sprintf('/[%s]+/', $separatorsRegex), '', ucwords($str, $separators)));
     }
 
     protected static function getAllowedPropertyByLCC($lcc): ?string

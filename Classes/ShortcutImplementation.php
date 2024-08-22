@@ -26,9 +26,7 @@ use ReflectionException;
 /**
  * @codingStandardsIgnoreStart
  * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null)
- * @method static AssetShortcut createAsset($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static CheckboxShortcut createCheckbox($identifier = null, $renderType = null)
- * @method static ImageShortcut createImage($identifier = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static InputShortcut createInput($identifier = null, $eval = null, $renderType = null)
  * @method static IRREShortcut createIRRE($identifier = null, $foreignTable = null, $minitems = null, $maxitems = null)
  * @method static LinkShortcut createLink($identifier = null)
@@ -44,6 +42,7 @@ use ReflectionException;
 class ShortcutImplementation
 {
     use ConfigTrait;
+    use DeprecatedShortcuts;
 
     /**
      * Calls Shortcut Methods

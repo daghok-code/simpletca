@@ -7,6 +7,7 @@ use Febis\SimpleTca\Data\TsConfig\FceItem as TsConfigItem;
 use Febis\SimpleTca\Data\Typoscript\DataProcessorItem;
 use Febis\SimpleTca\Data\Typoscript\FceItem as TyposcriptItem;
 use Febis\SimpleTca\Exception\CacheInstanceException;
+use Febis\SimpleTca\Exception\InvalidKeyException;
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\Exception\TyposcriptExistsException;
@@ -30,7 +31,7 @@ class FceGenerator
 
     protected final const FIELDS = [
         'rowDescription' => 'rowDescription,',
-        'categories' => 'categories,'
+        'categories' => 'categories,',
     ];
 
     protected final const PALETTES = [
@@ -50,7 +51,7 @@ class FceGenerator
         'notes' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,',
         'extended' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,',
         'language' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,',
-        'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,'
+        'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,',
     ];
 
     protected final const JOINED = [
@@ -59,7 +60,7 @@ class FceGenerator
         'access' => self::TABS['access'] . self::PALETTES['hidden'] . self::PALETTES['access'],
         'notes' => self::TABS['notes'] . self::FIELDS['rowDescription'],
         'language' => self::TABS['language'] . self::PALETTES['language'],
-        'categories' => self::TABS['categories'] . self::FIELDS['categories']
+        'categories' => self::TABS['categories'] . self::FIELDS['categories'],
     ];
 
     /**
@@ -109,20 +110,22 @@ class FceGenerator
     }
 
     /**
-     * @param list<AbstractShortcut> $columns
+     * @throws InvalidKeyException
+     * @param list<AbstractShortcut|array> $columns
      */
     public function withColumns(array $columns): static
     {
         $this->columns = [];
-        foreach ($columns as $column) {
-            $this->addColumn($column);
+        foreach ($columns as $key => $column) {
+            $this->addColumn($column, $key);
         }
 
         return $this;
     }
 
-    public function withShowItem(string $showitem = ''): static
+    public function withShowItem(string ...$showitem): static
     {
+        $showitem = implode(',', $showitem);
         $this->showItem = static::withSeparatorAppended($showitem);
         return $this;
     }
@@ -157,18 +160,32 @@ class FceGenerator
         return $this;
     }
 
-    public function addColumn(AbstractShortcut $column): void
+    /**
+     * @throws InvalidKeyException
+     */
+    public function addColumn(AbstractShortcut | array $column, string | int $key = null): void
     {
-        $this->columns[$column->getIdentifier()] = $column;
+        if (false === is_string($key)) {
+            if ($column instanceof AbstractShortcut) {
+                $key = $column->getIdentifier();
+            } elseif (isset($column['_identifier'])) {
+                $key = $column['_identifier'];
+            } else {
+                throw new InvalidKeyException('Missing key for TCA column', 1724323278);
+            }
+        }
+
+        $this->columns[$key] = $column;
     }
 
     /**
-     * @param list<AbstractShortcut> $columns
+     * @throws InvalidKeyException
+     * @param list<AbstractShortcut|array> $columns
      */
     public function addColumns(array $columns): void
     {
-        foreach ($columns as $column) {
-            $this->addColumn($column);
+        foreach ($columns as $key => $column) {
+            $this->addColumn($column, $key);
         }
     }
 
@@ -191,7 +208,7 @@ class FceGenerator
             [
                 $this->getLabel(),
                 $this->identifier,
-                $this->icon
+                $this->icon,
             ],
         );
 
@@ -209,20 +226,20 @@ class FceGenerator
         TcaGenerator::resetItemConfig();
     }
 
-    public function buildTtContentExtend(): array
+    protected function buildTtContentExtend(): array
     {
         return [
             static::CONTENT_TABLE => [
                 'ctrl' => [
                     'typeicon_classes' => [
-                        $this->identifier => $this->icon
-                    ]
+                        $this->identifier => $this->icon,
+                    ],
                 ],
                 'palettes' => $this->palettes,
                 'types' => [
                     $this->identifier => [
                         'showitem' => static::generateShowitem($this->showItem, $this->showitemMode),
-                        'columnsOverrides' => $this->columnsOverrides
+                        'columnsOverrides' => $this->columnsOverrides,
                     ],
                 ],
             ],
@@ -304,7 +321,7 @@ class FceGenerator
         $variable = [
             'ExtensionManagementUtility::addTCAcolumns' => [
                 static::CONTENT_TABLE,
-                $this->columns
+                $this->columns,
             ],
             'ExtensionManagementUtility::addTcaSelectItem' => [
                 static::CONTENT_TABLE,
@@ -312,13 +329,13 @@ class FceGenerator
                 [
                     $this->getLabel(),
                     $this->identifier,
-                    $this->icon
-                ]
+                    $this->icon,
+                ],
             ],
             'ArrayUtility::mergeRecursiveWithOverrule' => [
                 $GLOBALS['TCA'],
-                $this->buildTtContentExtend()
-            ]
+                $this->buildTtContentExtend(),
+            ],
         ];
         $title = $this->identifier;
         DebuggerUtility::var_dump($variable, $title, 16);

@@ -3,11 +3,15 @@
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
+use Febis\SimpleTca\Utility\ErrorUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
+ * @deprecated will be removed with upcoming versions
  */
 class AssetShortcut extends AbstractShortcut
 {
@@ -45,6 +49,8 @@ class AssetShortcut extends AbstractShortcut
         protected ?string $fieldName = null,
         protected ?string $allowedFileExtensions = null,
     ) {
+        ErrorUtility::triggerDeprecated(self::class, FileShortcut::class);
+
         $this->withFieldName($this->fieldName);
         parent::__construct($identifier);
     }
@@ -74,9 +80,15 @@ class AssetShortcut extends AbstractShortcut
 
     protected function buildConfig(): array
     {
+        $customSettingsOverride = parent::buildConfig();
+
+        if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() >= 12) {
+            unset($customSettingsOverride['type']);
+        }
+
         return ExtensionManagementUtility::getFileFieldTCAConfig(
             $this->fieldName,
-            parent::buildConfig(),
+            $customSettingsOverride,
             $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['SYS']['mediafile_ext'],
         );
     }

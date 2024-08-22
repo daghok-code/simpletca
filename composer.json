@@ -3,7 +3,7 @@
     "description": "Provides shortcuts and utilities for simple TCA generation",
     "license": "proprietary",
     "type": "typo3-cms-extension",
-    "version": "1.0.0",
+    "version": "12.0.1",
     "keywords": [
         "TYPO3",
         "extension"
@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "helhum/dotenv-connector": "^3.0",
         "typo3/minimal": "^12"
     },
@@ -45,7 +45,7 @@
         },
         "bin-dir": "bin",
         "platform": {
-            "php": "8.1"
+            "php": "8.2"
         },
         "vendor-dir": "vendor"
     },
@@ -59,9 +59,6 @@
             "@lint:phpcs",
             "@lint:phpmd",
             "@lint:phplint"
-        ],
-        "lint:phpcpd": [
-            "bin/phpcpd --exclude TCA --fuzzy ./"
         ],
         "lint:phpcs": [
             "bin/phpcs -s -p --standard=.testing/phpcs/ruleset.xml"

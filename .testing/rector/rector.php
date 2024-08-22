@@ -24,6 +24,8 @@ return RectorConfig::configure()
             '.testing',
             'public',
             'bin',
+            'Examples',
+            'Documentation',
             NameImportingPostRector::class => [
                 'ext_localconf.php',
                 'ext_tables.php',

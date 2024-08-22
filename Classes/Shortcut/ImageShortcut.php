@@ -3,6 +3,7 @@
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
+use Febis\SimpleTca\Utility\ErrorUtility;
 use TYPO3\CMS\Core\Resource\AbstractFile;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
@@ -10,6 +11,7 @@ use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 /**
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
+ * @deprecated will be removed with upcoming versions
  */
 class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
 {
@@ -62,7 +64,7 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
                 'table' => 'tt_content',
                 'fieldName' => $fieldName,
             ],
-            'as' => $fieldName
+            'as' => $fieldName,
         ];
     }
 
@@ -73,6 +75,8 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
         protected ?string $fieldName = null,
         protected ?string $allowedFileExtensions = null,
     ) {
+        ErrorUtility::triggerDeprecated(self::class, FileShortcut::class);
+
         $this->withFieldName($this->fieldName);
         parent::__construct($identifier);
     }
@@ -102,9 +106,12 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
 
     protected function buildConfig(): array
     {
+        $customSettingsOverride = parent::buildConfig();
+        unset($customSettingsOverride['type']);
+
         return ExtensionManagementUtility::getFileFieldTCAConfig(
             $this->fieldName,
-            parent::buildConfig(),
+            $customSettingsOverride,
             $this->allowedFileExtensions ?? $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
         );
     }
