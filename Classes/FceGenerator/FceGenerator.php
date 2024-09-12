@@ -355,7 +355,7 @@ class FceGenerator
 
     protected static function getLocalizedLabel(string $label): string
     {
-        return TcaGenerator::getConfig()->ll() . $label;
+        return TcaGenerator::getConfig()->ll() . self::CONTENT_TABLE . '.' . $label;
     }
 
     protected static function generateShowitem(string $showitem, Mode $showitemMode): string
