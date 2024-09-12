@@ -4,5 +4,8 @@ namespace Febis\SimpleTca\Data;
 
 class ItemConfig
 {
-    public string $identifier = '';
+    public function __construct(
+        public string $identifier = ''
+    ) {
+    }
 }
