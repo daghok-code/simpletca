@@ -318,6 +318,14 @@ class FceGenerator
      */
     public function debugRegisteringFCE(): void
     {
+        if ($this->autogenerateTsConfig) {
+            $this->generateTsConfig();
+        }
+
+        if ($this->autogenerateTyposcript) {
+            $this->generateTyposcript();
+        }
+
         $variable = [
             'ExtensionManagementUtility::addTCAcolumns' => [
                 static::CONTENT_TABLE,
@@ -336,7 +344,14 @@ class FceGenerator
                 $GLOBALS['TCA'],
                 $this->buildTtContentExtend(),
             ],
+            'TcaGenerator::getTsConfigData' => [
+                TcaGenerator::getTsConfigData()
+            ],
+            'TcaGenerator::getTyposcriptData' => [
+                TcaGenerator::getTyposcriptData()
+            ],
         ];
+
         $title = $this->identifier;
         DebuggerUtility::var_dump($variable, $title, 16);
         exit(0);

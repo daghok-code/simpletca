@@ -52,3 +52,7 @@ services:
                 name: event.listener
                 identifier: 'simpletca-fcegenerator-generate-tsconfig'
                 event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
+    Febis\SimpleTca\EventListener\TypoScriptLoader:
+            -   name: event.listener
+                identifier: 'simpletca-typoscriptloader'
+                event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\AfterTemplatesHaveBeenDeterminedEvent
