@@ -89,6 +89,15 @@ class TcaGenerator extends ShortcutImplementation
         static::getTsConfigData()->addFceGroup('default', new FceGroup('group', $header, $show), true);
     }
 
+    /**
+     * @throws TsConfigExistsException
+     * @throws CacheInstanceException
+     */
+    public static function addFceGroup(string $identifier, string $header, string $show = '*'): void
+    {
+        static::getTsConfigData()->addFceGroup($identifier, new FceGroup($identifier, $header, $show), true);
+    }
+
     public static function getTcaDefinitionDataInstance(): TcaDefinitionData
     {
         if (!static::$tcaDefinitionDataInstance instanceof TcaDefinitionData) {

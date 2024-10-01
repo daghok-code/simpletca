@@ -163,6 +163,12 @@ class FceGenerator
         return $this;
     }
 
+    public function withGroup(string $identifier): static
+    {
+        $this->tsConfigFceGroupIdentifier = $identifier;
+        return $this;
+    }
+
     /**
      * @throws InvalidKeyException
      */
