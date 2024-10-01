@@ -86,7 +86,7 @@ class TcaGenerator extends ShortcutImplementation
      */
     public static function overrideDefaultTsConfigFceGroup(string $header, string $show = '*'): void
     {
-        static::getTsConfigData()->addFceGroup('default', new FceGroup('group', $header, $show), true);
+        static::getTsConfigData()->addFceGroup('default', new FceGroup('default', $header, $show), true);
     }
 
     /**
