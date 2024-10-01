@@ -33,6 +33,8 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
     protected ?string $label = null;
 
+    protected ?string $description = null;
+
     protected bool $exclude = true;
 
     public function __construct(
@@ -49,6 +51,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         $this->identifier = $identifier;
         $this->label = TcaGenerator::translate($identifier);
+        $this->description = TcaGenerator::translate($identifier . '.description');
 
         return $this;
     }
@@ -124,6 +127,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return [
             '_identifier' => $this->identifier,
             'label' => $this->label,
+            'description' => $this->description,
             'exclude' => $this->exclude,
             'config' => [],
         ];
