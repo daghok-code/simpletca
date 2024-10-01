@@ -11,12 +11,18 @@ class FceItem
         protected string $groupIdentifier,
         protected string $iconIdentifier = 'default-not-found',
         protected ?string $title = null,
+        protected ?string $description = null,
     ) {
     }
 
     protected function getTitle(): string
     {
         return $this->title ?? $this->identifier;
+    }
+
+    protected function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function generateTsConfig(): string
@@ -36,6 +42,10 @@ class FceItem
                             [
                                 'title',
                                 $this->getTitle(),
+                            ],
+                            [
+                                'description',
+                                $this->getDescription(),
                             ],
                             [
                                 'tt_content_defValues',

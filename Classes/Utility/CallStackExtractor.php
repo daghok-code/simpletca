@@ -61,7 +61,7 @@ class CallStackExtractor implements SingletonInterface
                 $fileMatch,
             );
 
-            if (!empty($fileMatch)) {
+            if ($fileMatch !== []) {
                 return $fileMatch;
             }
         }

@@ -24,6 +24,7 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  * @TODO Refactor, split responsibilities into separate classes
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class FceGenerator
 {
@@ -71,6 +72,7 @@ class FceGenerator
         protected string $identifier = '',
         protected string $cTypeLabel = '',
         protected string $icon = '',
+        protected string $description = '',
         protected array $palettes = [],
         protected array $columns = [],
         protected string $showItem = '',
@@ -83,6 +85,7 @@ class FceGenerator
     ) {
         $this->cTypeLabel = $identifier . '.title';
         $this->icon = 'ce-' . $identifier;
+        $this->description = $identifier . '.description';
     }
 
     public function withIdentifier(string $identifier = ''): static
@@ -262,7 +265,13 @@ class FceGenerator
         if (!TcaGenerator::getTsConfigData()->hasFceItem($this->identifier)) {
             TcaGenerator::getTsConfigData()->addFceItem(
                 $this->identifier,
-                new TsConfigItem($this->identifier, $this->tsConfigFceGroupIdentifier, $this->icon, $this->getLabel()),
+                new TsConfigItem(
+                    $this->identifier,
+                    $this->tsConfigFceGroupIdentifier,
+                    $this->icon,
+                    $this->getLabel(),
+                    $this->getDescription()
+                ),
             );
         }
     }
@@ -366,6 +375,19 @@ class FceGenerator
         } else {
             return $this->identifier;
         }
+    }
+
+    protected function getDescription(): string
+    {
+        if (str_starts_with($this->description, 'LLL:')) {
+            return $this->description;
+        }
+
+        if ($this->description !== '') {
+            return static::getLocalizedLabel($this->description);
+        }
+
+        return $this->description;
     }
 
     protected static function getLocalizedLabel(string $label): string
