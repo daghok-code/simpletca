@@ -9,6 +9,12 @@ class Control implements ComponentInterface
 {
     public string $label = 'title';
 
+    public string $labelAlt = '';
+
+    public bool $labelAltForce = false;
+
+    public ?string $labelUserFunc = null;
+
     public bool $hideTable = false;
 
     public bool $ignorePageTypeRestriction = false;
@@ -35,6 +41,9 @@ class Control implements ComponentInterface
             'ctrl' => [
                 'title' => $this->title,
                 'label' => $this->label,
+                'label_alt' => $this->labelAlt,
+                'label_alt_force' => $this->labelAltForce,
+                'label_userFunc' => $this->labelUserFunc,
                 'tstamp' => 'tstamp',
                 'crdate' => 'crdate',
                 'cruser_id' => 'cruser_id',
