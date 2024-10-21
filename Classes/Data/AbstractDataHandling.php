@@ -28,7 +28,7 @@ abstract class AbstractDataHandling
 
     public function getTimestamp(): int
     {
-        return $this->data->getTimestamp();
+        return $this->data->timestamp;
     }
 
     /**
@@ -37,6 +37,8 @@ abstract class AbstractDataHandling
     protected function writeData(): void
     {
         $this->data->addDebugMessage(PHP_EOL . $this->debugOutput() . PHP_EOL, static::class);
+
+        $this->data->timestamp = time();
 
         $this->cacheHandler->createCacheFile($this->data);
     }

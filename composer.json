@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "helhum/dotenv-connector": "^3.1",
         "typo3/minimal": "^13"
     },
@@ -44,7 +44,7 @@
         },
         "bin-dir": "bin",
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "vendor-dir": "vendor"
     },
