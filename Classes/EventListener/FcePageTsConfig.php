@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Febis\SimpleTca\EventListener;
 
+use Febis\SimpleTca\Exception\CacheInstanceException;
 use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\TcaGenerator;
-use TYPO3\CMS\Core\Configuration\Event\ModifyLoadedPageTsConfigEvent as LegacyModifyLoadedPageTsConfigEvent;
 use TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent;
 
 /**
@@ -17,8 +17,9 @@ class FcePageTsConfig
 {
     /**
      * @throws TsConfigExistsException
+     * @throws CacheInstanceException
      */
-    public function __invoke(LegacyModifyLoadedPageTsConfigEvent | ModifyLoadedPageTsConfigEvent $event)
+    public function __invoke(ModifyLoadedPageTsConfigEvent $event): void
     {
         $event->addTsConfig(TcaGenerator::getTsConfigData()->getFullTsConfig());
     }

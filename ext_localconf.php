@@ -19,8 +19,3 @@ $cacheConfiguration = [
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['simpletca_tsconfig'] ??= $cacheConfiguration;
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['simpletca_typoscript'] ??= $cacheConfiguration;
-
-if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 12) {
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Core/TypoScript/TemplateService']['runThroughTemplatesPostProcessing']
-    [1718744765] = TyposcriptLoader::class . '->addGeneratedTypoScript';
-}
