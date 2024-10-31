@@ -4,5 +4,8 @@ namespace Febis\SimpleTca\Data\Cacheable;
 
 class BaseCacheable extends AbstractCacheable
 {
-    public int $timestamp;
+    public function getTimestamp(): int
+    {
+        return time();
+    }
 }

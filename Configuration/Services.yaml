@@ -26,7 +26,7 @@ services:
         arguments: [ '@simpletca_tsconfig.cache' ]
         public: true
 
-    Febis\SimpleTca\Data\TsConfig\TyposcriptData:
+    Febis\SimpleTca\Data\Typoscript\TyposcriptData:
         arguments: [ '@simpletca_typoscript.cache' ]
         public: true
 
