@@ -3,7 +3,7 @@
     "description": "Provides shortcuts and utilities for simple TCA generation",
     "license": "proprietary",
     "type": "typo3-cms-extension",
-    "version": "13.0.0",
+    "version": "13.1.2",
     "keywords": [
         "TYPO3",
         "extension"
