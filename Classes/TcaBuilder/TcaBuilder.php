@@ -52,8 +52,10 @@ class TcaBuilder
         protected bool $activateSorting = true,
         protected bool $activateEnableColumns = true,
     ) {
+        $conf = TcaGenerator::getConfig();
+
         $this->ctrl = new Control(
-            TcaGenerator::translate('title'),
+            $conf->ll() . $conf->getTablename(),
             $this->activateLanguage,
             $this->activateSorting,
             $this->activateEnableColumns,
