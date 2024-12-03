@@ -27,15 +27,6 @@ class CheckboxShortcut extends AbstractShortcut
         return [];
     }
 
-    #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'TINYINT',
-            0,
-        );
-    }
-
     public function __construct(
         ?string $identifier = null,
         protected ?string $renderType = null,

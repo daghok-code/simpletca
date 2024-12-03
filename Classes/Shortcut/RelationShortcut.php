@@ -36,27 +36,6 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
     }
 
     #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'INT',
-            0,
-        );
-    }
-
-    #[\Override]
-    protected function addFieldForDbGeneration(string $identifier): void
-    {
-        parent::addFieldForDbGeneration($identifier);
-        TcaGenerator::getTcaDefinitionDataInstance()->addTable(
-            new Table([
-                'parent' => new Field('INT', 0)
-            ]),
-            $this->allowed,
-        );
-    }
-
-    #[\Override]
     public function getDataProcessorType(): string
     {
         return DatabaseQueryProcessor::class;

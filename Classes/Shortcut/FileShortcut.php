@@ -32,15 +32,6 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
     }
 
     #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'INT',
-            0,
-        );
-    }
-
-    #[\Override]
     public function getDataProcessorType(): string
     {
         return FilesProcessor::class;

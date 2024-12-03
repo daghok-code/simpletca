@@ -3,7 +3,6 @@
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Data\Field;
-use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
@@ -24,8 +23,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     abstract protected static function getAllowedProperties(): array;
 
     abstract protected static function getDefaultProperties(): array;
-
-    abstract protected static function getSqlDefinition(): Field;
 
     /** For Properties, that are not set by this shortcut, but allowed by TYPO3. Set by withAdditionalAttributes */
     protected ?array $additionalAttributes = null;
@@ -119,12 +116,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $this;
     }
 
-    public function overrideSqlDefinition(?Field $overrideField): static
-    {
-        $this->overrideField = $overrideField;
-        return $this;
-    }
-
     /**
      * @throws NoIdentifierException
      * @throws NoTablenameException
@@ -139,8 +130,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         if (null === $this->tablename) {
             throw new NoTablenameException();
         }
-
-        $this->addFieldForDbGeneration($this->identifier);
 
         $tca = $this->buildContainer();
         $tca['config'] = $this->buildConfig();
@@ -253,18 +242,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         }
 
         return $this;
-    }
-
-    protected function addFieldForDbGeneration(string $identifier): void
-    {
-        TcaGenerator::getTcaDefinitionDataInstance()->addTable(
-            new Table(
-                [
-                    $identifier => $this->overrideField ?? static::getSqlDefinition(),
-                ],
-            ),
-            $this->tablename,
-        );
     }
 
     /**

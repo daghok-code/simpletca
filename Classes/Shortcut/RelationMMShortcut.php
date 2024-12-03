@@ -36,27 +36,6 @@ class RelationMMShortcut extends AbstractShortcut
         ];
     }
 
-    #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'INT',
-            0,
-        );
-    }
-
-    #[\Override]
-    protected function addFieldForDbGeneration(string $identifier): void
-    {
-        parent::addFieldForDbGeneration($identifier);
-        TcaGenerator::getTcaDefinitionDataInstance()->addTable(
-            new Table([
-                'parent' => new Field('INT', 0)
-            ]),
-            $this->allowed,
-        );
-    }
-
     public function __construct(
         ?string $identifier = null,
         protected ?string $allowed = null,

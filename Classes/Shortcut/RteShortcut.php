@@ -29,15 +29,6 @@ class RteShortcut extends AbstractShortcut
         ];
     }
 
-    #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'TEXT',
-            'NULL',
-        );
-    }
-
     public function __construct(
         ?string $identifier = null,
         protected ?bool $required = null,

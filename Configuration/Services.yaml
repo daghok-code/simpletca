@@ -33,23 +33,12 @@ services:
     Febis\SimpleTca\Utility\CallStackExtractor:
         public: true
 
-    Febis\SimpleTca\EventListener\TcaGeneratorTableDefinitionUpdate:
-            -   name: event.listener
-                identifier: 'simpletca-tcagenerator-update-tables'
-                event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
     Febis\SimpleTca\EventListener\TcaGeneratorBuildTca:
             -   name: event.listener
                 identifier: 'simpletca-tcagenerator-build-tca'
                 event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
     Febis\SimpleTca\EventListener\FcePageTsConfig:
-            # Remove when TYPO3 v11 compatibility is dropped
-            -
-                name: event.listener
-                identifier: 'simpletca-fcegenerator-generate-tsconfig-v11'
-                event: TYPO3\CMS\Core\Configuration\Event\ModifyLoadedPageTsConfigEvent
-            # TYPO3 v12 and above
-            -
-                name: event.listener
+            -   name: event.listener
                 identifier: 'simpletca-fcegenerator-generate-tsconfig'
                 event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
     Febis\SimpleTca\EventListener\TypoScriptLoader:

@@ -27,15 +27,6 @@ class LinkShortcut extends AbstractShortcut
         return [];
     }
 
-    #[\Override]
-    protected static function getSqlDefinition(): Field
-    {
-        return new Field(
-            'VARCHAR(255)',
-            '',
-        );
-    }
-
     public function __construct(
         ?string $identifier = null,
     ) {
