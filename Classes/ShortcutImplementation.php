@@ -6,13 +6,16 @@ use Febis\SimpleTca\Exception\CallstackExtractionException;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
 use Febis\SimpleTca\Exception\ShortcutNotAllowedException;
 use Febis\SimpleTca\Shortcut\AbstractShortcut;
-use Febis\SimpleTca\Shortcut\AssetShortcut;
+use Febis\SimpleTca\Shortcut\CategoryShortcut;
 use Febis\SimpleTca\Shortcut\CheckboxShortcut;
+use Febis\SimpleTca\Shortcut\ColorShortcut;
+use Febis\SimpleTca\Shortcut\DatetimeShortcut;
+use Febis\SimpleTca\Shortcut\EmailShortcut;
 use Febis\SimpleTca\Shortcut\FileShortcut;
-use Febis\SimpleTca\Shortcut\ImageShortcut;
 use Febis\SimpleTca\Shortcut\InputShortcut;
 use Febis\SimpleTca\Shortcut\IRREShortcut;
 use Febis\SimpleTca\Shortcut\LinkShortcut;
+use Febis\SimpleTca\Shortcut\NumberShortcut;
 use Febis\SimpleTca\Shortcut\PassthroughShortcut;
 use Febis\SimpleTca\Shortcut\RelationMMShortcut;
 use Febis\SimpleTca\Shortcut\RelationShortcut;
@@ -20,22 +23,29 @@ use Febis\SimpleTca\Shortcut\RteShortcut;
 use Febis\SimpleTca\Shortcut\SelectSingleShortcut;
 use Febis\SimpleTca\Shortcut\SlugShortcut;
 use Febis\SimpleTca\Shortcut\TcaShortcutInterface;
+use Febis\SimpleTca\Shortcut\UuidShortcut;
 use ReflectionClass;
 use ReflectionException;
 
 /**
  * @codingStandardsIgnoreStart
- * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null)
+ * @method static CategoryShortcut createCategory($identifier = null, $minitems = null, $maxitems = null, $treeConfig = [])
  * @method static CheckboxShortcut createCheckbox($identifier = null, $renderType = null)
- * @method static InputShortcut createInput($identifier = null, $eval = null, $renderType = null)
+ * @method static ColorShortcut createColor($identifier = null, $required = false)
+ * @method static DatetimeShortcut createDatetime($identifier = null, $required = false)
+ * @method static EmailShortcut createEmail($identifier = null, $eval = null, $required = false)
+ * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null)
+ * @method static InputShortcut createInput($identifier = null, $eval = null, $renderType = null, $required = false)
  * @method static IRREShortcut createIRRE($identifier = null, $foreignTable = null, $minitems = null, $maxitems = null)
  * @method static LinkShortcut createLink($identifier = null)
+ * @method static NumberShortcut createNumber($identifier = null, $format = null, $required = false)
  * @method static PassthroughShortcut createPassthrough($identifier = null)
- * @method static RelationShortcut createRelation($identifier = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
  * @method static RelationMMShortcut createRelationMM($identifier = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
- * @method static RteShortcut createRte($identifier = null)
+ * @method static RelationShortcut createRelation($identifier = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
+ * @method static RteShortcut createRte($identifier = null, $required = false)
  * @method static SelectSingleShortcut createSelectSingle($identifier = null, $items = null, $renderType = null)
  * @method static SlugShortcut createSlug($identifier = null, $size = null, $eval = null)
+ * @method static UuidShortcut createUuid($identifier = null, $version = null, $required = false)
  * @codingStandardsIgnoreEnd
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
