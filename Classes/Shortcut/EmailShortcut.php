@@ -10,6 +10,14 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class EmailShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $eval = null,
+        protected ?bool $required = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
@@ -29,15 +37,5 @@ class EmailShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $eval = null,
-        protected ?string $renderType = null,
-        protected ?bool $required = null,
-        protected ?string $placeholder = null,
-    ) {
-        parent::__construct($identifier);
     }
 }
