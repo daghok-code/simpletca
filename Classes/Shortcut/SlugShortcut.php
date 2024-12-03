@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
 
 /**
  * @method self withSize($size = null)
@@ -19,7 +18,10 @@ class SlugShortcut extends AbstractShortcut
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['size', 'eval'];
+        return [
+            'size',
+            'eval',
+        ];
     }
 
     #[\Override]
@@ -29,16 +31,16 @@ class SlugShortcut extends AbstractShortcut
             'size' => '80',
             'generatorOptions' => [
                 'fields' => [
-                    'title'
+                    'title',
                 ],
                 'fieldSeparator' => '/',
                 'replacements' => [
-                    '/' => '-'
+                    '/' => '-',
                 ],
             ],
             'fallbackCharactor' => '-',
             'eval' => 'uniqueInSite',
-            'default' => ''
+            'default' => '',
         ];
     }
 

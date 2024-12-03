@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
 
 class PassthroughShortcut extends AbstractShortcut
 {

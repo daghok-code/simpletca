@@ -2,7 +2,7 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
+
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
@@ -24,14 +24,19 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['allowed', 'minitems', 'maxitems', 'size'];
+        return [
+            'allowed',
+            'minitems',
+            'maxitems',
+            'size',
+        ];
     }
 
     #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
-            'size' => 1
+            'size' => 1,
         ];
     }
 
@@ -50,7 +55,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
             'uidInList.field' => $fieldName,
             'orderBy' => 'sorting',
 
-            'as' => $fieldName
+            'as' => $fieldName,
         ];
     }
 

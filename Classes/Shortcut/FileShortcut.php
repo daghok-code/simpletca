@@ -2,7 +2,7 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
+
 use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 
 /**
@@ -20,7 +20,12 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['minitems', 'maxitems', 'overrideChildTca', 'allowed'];
+        return [
+            'minitems',
+            'maxitems',
+            'overrideChildTca',
+            'allowed',
+        ];
     }
 
     #[\Override]
@@ -45,7 +50,7 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
                 'table' => $tableName,
                 'fieldName' => $fieldName,
             ],
-            'as' => $fieldName
+            'as' => $fieldName,
         ];
     }
 

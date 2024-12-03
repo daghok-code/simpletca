@@ -2,7 +2,7 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
+
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
@@ -264,7 +264,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         $filtered = array_filter(
             static::getAllowedProperties(),
-            static fn ($property) => static::toLowerCamelCase($property) === $lcc,
+            static fn($property) => static::toLowerCamelCase($property) === $lcc,
         );
 
         return $filtered !== [] ? reset($filtered) : null;

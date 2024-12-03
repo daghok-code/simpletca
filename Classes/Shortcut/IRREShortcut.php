@@ -2,7 +2,7 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
+
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
@@ -23,7 +23,11 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['foreign_table', 'minitems', 'maxitems'];
+        return [
+            'foreign_table',
+            'minitems',
+            'maxitems',
+        ];
     }
 
     #[\Override]
@@ -56,7 +60,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
             'pidInList.field' => 'pid',
             'orderBy' => 'sorting',
 
-            'as' => $fieldName
+            'as' => $fieldName,
         ];
     }
 

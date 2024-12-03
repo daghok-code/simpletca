@@ -2,7 +2,7 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
+
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\TcaGenerator;
 
@@ -25,14 +25,21 @@ class RelationMMShortcut extends AbstractShortcut
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['allowed', 'minitems', 'maxitems', 'size', 'MM', 'MM_opposite_field'];
+        return [
+            'allowed',
+            'minitems',
+            'maxitems',
+            'size',
+            'MM',
+            'MM_opposite_field',
+        ];
     }
 
     #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
-            'size' => 1
+            'size' => 1,
         ];
     }
 

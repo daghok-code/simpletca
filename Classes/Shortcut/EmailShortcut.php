@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
 
 /**
  * @method self withEval($eval = null)
@@ -20,7 +19,11 @@ class EmailShortcut extends AbstractShortcut
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['eval', 'placeholder', 'required'];
+        return [
+            'eval',
+            'placeholder',
+            'required',
+        ];
     }
 
     protected static function getDefaultProperties(): array

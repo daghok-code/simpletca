@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Field;
 
 /**
  * @method self withItems($items = null)
@@ -19,7 +18,10 @@ class SelectSingleShortcut extends AbstractShortcut
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['items', 'renderType'];
+        return [
+            'items',
+            'renderType',
+        ];
     }
 
     #[\Override]
