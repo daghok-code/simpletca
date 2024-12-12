@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 use Febis\SimpleTca\Exception\NoIdentifierException;
 use Febis\SimpleTca\Exception\NoTablenameException;
 use Febis\SimpleTca\TcaGenerator;
@@ -14,6 +13,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  * TODO: refactor split into separate classes to maintain responsibilities
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
@@ -42,7 +42,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     public function __construct(
         protected ?string $identifier = null,
         protected ?string $tablename = null,
-        protected ?Field $overrideField = null,
     ) {
         if (!is_null($this->identifier)) {
             $this->withIdentifier($this->identifier);

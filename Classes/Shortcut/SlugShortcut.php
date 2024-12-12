@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withSize($size = null)
  * @method self withEval($eval = null)

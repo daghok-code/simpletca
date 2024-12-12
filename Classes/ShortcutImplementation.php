@@ -19,7 +19,6 @@ use Febis\SimpleTca\Shortcut\NumberShortcut;
 use Febis\SimpleTca\Shortcut\PassthroughShortcut;
 use Febis\SimpleTca\Shortcut\RelationMMShortcut;
 use Febis\SimpleTca\Shortcut\RelationShortcut;
-use Febis\SimpleTca\Shortcut\RteShortcut;
 use Febis\SimpleTca\Shortcut\SelectSingleShortcut;
 use Febis\SimpleTca\Shortcut\SlugShortcut;
 use Febis\SimpleTca\Shortcut\TcaShortcutInterface;

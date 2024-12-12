@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 
 /**

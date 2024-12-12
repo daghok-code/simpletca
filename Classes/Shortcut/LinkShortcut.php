@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withAllowedTypes($allowedTypes = null)
  */

@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withEnableRichtext(bool $enableRichtext = false)
  * @method self withRequired(bool $required = false)

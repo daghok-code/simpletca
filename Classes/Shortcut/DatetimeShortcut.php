@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withDbType($dbType = null)
  * @method self withDefault($default = null)

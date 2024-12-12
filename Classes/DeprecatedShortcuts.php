@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca;
 
+use Febis\SimpleTca\Shortcut\RteShortcut;
 use Febis\SimpleTca\Utility\ErrorUtility;
 
 /**
@@ -9,6 +10,19 @@ use Febis\SimpleTca\Utility\ErrorUtility;
  */
 trait DeprecatedShortcuts
 {
+    /**
+     * @deprecated use TcaGenerator::createText instead
+     */
+    public static function createRte(
+        $identifier = null
+    ): RteShortcut {
+        ErrorUtility::triggerDeprecated('::createRte', TcaGenerator::class . '::createText');
+
+        /** @phpstan-var RteShortcut $rte */
+        $rte = static::__callStatic('createRte', func_get_args());
+        return $rte;
+    }
+
     ///**
     // * @deprecated use TcaGenerator::createXY instead
     // */

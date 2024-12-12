@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withVersion($version = null)
  * @method self withEnableCopyToClipboard(bool $enableCopyToClipboard = false)

@@ -35,7 +35,7 @@ class NumberShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $identifier = null,
-        ?string $format = null,
+        protected ?string $format = null,
         protected ?bool $required = null,
     ) {
         parent::__construct($identifier);

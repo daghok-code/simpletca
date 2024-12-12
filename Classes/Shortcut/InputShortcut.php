@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withEval($eval = null)
  * @method self withRenderType($renderType = null)

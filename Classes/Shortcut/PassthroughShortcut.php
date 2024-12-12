@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 class PassthroughShortcut extends AbstractShortcut
 {
     protected ?string $eval = null;

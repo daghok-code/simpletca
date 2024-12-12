@@ -2,7 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-
 /**
  * @method self withEval($eval = null)
  * @method self withPlaceholder($placeholder = null)
@@ -34,6 +33,7 @@ class EmailShortcut extends AbstractShortcut
         ];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [];
