@@ -46,7 +46,7 @@ $fce->addColumns(
 // different shortcut types
 $fce->addColumns(
     [
-        TcaGenerator::createRte('text'),
+        TcaGenerator::createText('text', true),
         TcaGenerator::createLink('link'),
         TcaGenerator::createSlug('slug'),
 

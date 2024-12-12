@@ -3,13 +3,11 @@
 namespace Febis\SimpleTca\Shortcut;
 
 
-use Febis\SimpleTca\Utility\ErrorUtility;
-
 /**
+ * @method self withEnableRichtext(bool $enableRichtext = false)
  * @method self withRequired(bool $required = false)
- * @deprecated will be removed with upcoming versions
  */
-class RteShortcut extends AbstractShortcut
+class TextShortcut extends AbstractShortcut
 {
     #[\Override]
     protected static function getType(): string
@@ -20,23 +18,20 @@ class RteShortcut extends AbstractShortcut
     #[\Override]
     protected static function getAllowedProperties(): array
     {
-        return ['required'];
+        return ['enableRichtext', 'required'];
     }
 
     #[\Override]
     protected static function getDefaultProperties(): array
     {
-        return [
-            'enableRichtext' => true,
-        ];
+        return [];
     }
 
     public function __construct(
         ?string $identifier = null,
+        protected ?bool $enableRichtext = null,
         protected ?bool $required = null,
     ) {
-        ErrorUtility::triggerDeprecated(self::class, TextShortcut::class);
-
         parent::__construct($identifier);
     }
 }

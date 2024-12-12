@@ -23,6 +23,7 @@ use Febis\SimpleTca\Shortcut\RteShortcut;
 use Febis\SimpleTca\Shortcut\SelectSingleShortcut;
 use Febis\SimpleTca\Shortcut\SlugShortcut;
 use Febis\SimpleTca\Shortcut\TcaShortcutInterface;
+use Febis\SimpleTca\Shortcut\TextShortcut;
 use Febis\SimpleTca\Shortcut\UuidShortcut;
 use ReflectionClass;
 use ReflectionException;
@@ -42,9 +43,9 @@ use ReflectionException;
  * @method static PassthroughShortcut createPassthrough($identifier = null)
  * @method static RelationMMShortcut createRelationMM($identifier = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
  * @method static RelationShortcut createRelation($identifier = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
- * @method static RteShortcut createRte($identifier = null, $required = false)
  * @method static SelectSingleShortcut createSelectSingle($identifier = null, $items = null, $renderType = null)
  * @method static SlugShortcut createSlug($identifier = null, $size = null, $eval = null)
+ * @method static TextShortcut createText($identifier = null, $enableRichtext = false, $required = false)
  * @method static UuidShortcut createUuid($identifier = null, $version = null, $required = false)
  * @codingStandardsIgnoreEnd
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
