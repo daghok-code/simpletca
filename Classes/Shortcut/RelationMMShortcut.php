@@ -2,9 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Table;
-use Febis\SimpleTca\TcaGenerator;
-
 /**
  * @method self withAllowed($allowed = null)
  * @method self withMinitems($minitems = null)

@@ -3,7 +3,6 @@
 namespace Febis\SimpleTca;
 
 use Febis\SimpleTca\Data\ItemConfig;
-use Febis\SimpleTca\Data\TcaDefinitionData;
 use Febis\SimpleTca\Data\TsConfig\FceGroup;
 use Febis\SimpleTca\Data\TsConfig\TsConfigDataHandling;
 use Febis\SimpleTca\Data\Typoscript\TyposcriptDataHandling;
@@ -18,8 +17,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class TcaGenerator extends ShortcutImplementation
 {
     use ConfigTrait;
-
-    protected static ?TcaDefinitionData $tcaDefinitionDataInstance = null;
 
     protected static ?TsConfigDataHandling $tsConfigData = null;
 
@@ -112,15 +109,6 @@ class TcaGenerator extends ShortcutImplementation
     public static function addFceGroup(string $identifier, string $header, string $show = '*'): void
     {
         static::getTsConfigData()->addFceGroup($identifier, new FceGroup($identifier, $header, $show), true);
-    }
-
-    public static function getTcaDefinitionDataInstance(): TcaDefinitionData
-    {
-        if (!static::$tcaDefinitionDataInstance instanceof TcaDefinitionData) {
-            static::$tcaDefinitionDataInstance = GeneralUtility::makeInstance(TcaDefinitionData::class);
-        }
-
-        return static::$tcaDefinitionDataInstance;
     }
 
     /**

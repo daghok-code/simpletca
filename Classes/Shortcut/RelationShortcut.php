@@ -2,8 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Table;
-use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
 
 /**

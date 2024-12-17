@@ -2,8 +2,6 @@
 
 namespace Febis\SimpleTca\Shortcut;
 
-use Febis\SimpleTca\Data\Table;
-use Febis\SimpleTca\TcaGenerator;
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
 
 /**
@@ -73,7 +71,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         ?string $identifier = null,
         protected ?string $foreignTable = null,
         protected ?int $minitems = null,
-        protected ?int $maxitems = null
+        protected ?int $maxitems = null,
     ) {
         parent::__construct($identifier);
     }
