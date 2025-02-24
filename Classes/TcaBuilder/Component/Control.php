@@ -27,6 +27,8 @@ class Control implements ComponentInterface
 
     public string $searchFields = 'title';
 
+    public string $type = '';
+
     public function __construct(
         protected string $title,
         public bool $activateLanguage,
@@ -63,6 +65,7 @@ class Control implements ComponentInterface
                     'starttime' => 'starttime',
                     'endtime' => 'endtime',
                 ],
+                'type' => $this->type,
                 'typeicon_classes' => [
                     'default' => $this->icon,
                 ],
