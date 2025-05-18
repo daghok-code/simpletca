@@ -32,6 +32,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
     {
         return [
             'foreign_field' => 'parent',
+            'foreign_sortby' => 'sorting',
             'appearance' => [
                 'collapseAll' => true,
                 'showSynchronizationLink' => true,
