@@ -65,13 +65,16 @@ class Control implements ComponentInterface
                     'starttime' => 'starttime',
                     'endtime' => 'endtime',
                 ],
-                'type' => $this->type,
                 'typeicon_classes' => [
                     'default' => $this->icon,
                 ],
                 'searchFields' => $this->searchFields,
             ],
         ];
+
+        if ($this->type !== '' && $this->type !== '0') {
+            $ctrl['ctrl']['type'] = $this->type;
+        }
 
         if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() >= 12) {
             $ctrl['ctrl']['security']['ignorePageTypeRestriction'] = $this->ignorePageTypeRestriction;
