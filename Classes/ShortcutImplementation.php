@@ -17,6 +17,7 @@ use Febis\SimpleTca\Shortcut\IRREShortcut;
 use Febis\SimpleTca\Shortcut\LinkShortcut;
 use Febis\SimpleTca\Shortcut\NumberShortcut;
 use Febis\SimpleTca\Shortcut\PassthroughShortcut;
+use Febis\SimpleTca\Shortcut\RadioShortcut;
 use Febis\SimpleTca\Shortcut\RelationMMShortcut;
 use Febis\SimpleTca\Shortcut\RelationShortcut;
 use Febis\SimpleTca\Shortcut\SelectSingleShortcut;
@@ -40,6 +41,7 @@ use ReflectionException;
  * @method static LinkShortcut createLink($identifier = null)
  * @method static NumberShortcut createNumber($identifier = null, $format = null, $required = false)
  * @method static PassthroughShortcut createPassthrough($identifier = null)
+ * @method static RadioShortcut createRadio($identifier = null, $items = null)
  * @method static RelationMMShortcut createRelationMM($identifier = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
  * @method static RelationShortcut createRelation($identifier = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
  * @method static SelectSingleShortcut createSelectSingle($identifier = null, $items = null, $renderType = null)
