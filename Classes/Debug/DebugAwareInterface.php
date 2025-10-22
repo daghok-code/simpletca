@@ -6,5 +6,5 @@ interface DebugAwareInterface
 {
     public function setDebug(DebugInterface $debug): void;
 
-    public function addDebugMessage(string $message, string $key = null): void;
+    public function addDebugMessage(string $message, ?string $key = null): void;
 }

@@ -14,7 +14,7 @@ class TsConfigDataHandling extends AbstractDataHandling
     /** @var TsConfigCacheable $data */
     protected BaseCacheable $data;
 
-    public function __construct(PhpFrontend $cache = null)
+    public function __construct(?PhpFrontend $cache = null)
     {
         parent::__construct('simpletca_tsconfig', $cache);
     }

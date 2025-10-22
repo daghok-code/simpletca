@@ -15,7 +15,7 @@ trait DebugAwareTrait
         }
     }
 
-    public function addDebugMessage(string $message, string $key = null): void
+    public function addDebugMessage(string $message, ?string $key = null): void
     {
         $this->debug?->add($message, $key);
     }

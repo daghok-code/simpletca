@@ -19,7 +19,7 @@ abstract class AbstractDataHandling
     /**
      * @throws CacheInstanceException
      */
-    public function __construct(string $cacheIdentifier, PhpFrontend $cache = null)
+    public function __construct(string $cacheIdentifier, ?PhpFrontend $cache = null)
     {
         $this->cacheHandler = CacheHandler::create($cacheIdentifier, $cache);
         $this->initData();

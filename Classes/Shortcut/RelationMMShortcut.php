@@ -60,7 +60,7 @@ class RelationMMShortcut extends AbstractShortcut
         return $config;
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;

@@ -177,7 +177,7 @@ class FceGenerator
     /**
      * @throws InvalidKeyException
      */
-    public function addColumn(AbstractShortcut | array $column, string | int $key = null): void
+    public function addColumn(AbstractShortcut | array $column, string | int | null $key = null): void
     {
         if (false === is_string($key)) {
             if ($column instanceof AbstractShortcut) {

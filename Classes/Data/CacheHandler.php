@@ -23,7 +23,7 @@ class CacheHandler
     /**
      * @throws CacheInstanceException
      */
-    public static function create(string $cacheIdentifier, PhpFrontend $cache = null): static
+    public static function create(string $cacheIdentifier, ?PhpFrontend $cache = null): static
     {
         /** @phpstan-ignore-next-line */
         $cacheHandler = new static($cacheIdentifier, $cache);

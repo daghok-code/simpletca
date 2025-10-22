@@ -77,7 +77,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         parent::__construct($identifier);
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;
