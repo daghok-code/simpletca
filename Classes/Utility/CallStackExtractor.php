@@ -4,6 +4,7 @@ namespace Febis\SimpleTca\Utility;
 
 use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -91,12 +92,16 @@ class CallStackExtractor implements SingletonInterface
                 $connection = DriverManager::getConnection($connectionParams);
             }
 
-            $this->tableList = $connection
-                ->prepare("SHOW TABLES;")
-                ->executeQuery()
-                ->fetchFirstColumn();
+            try {
+                $this->tableList = $connection
+                    ->prepare("SHOW TABLES;")
+                    ->executeQuery()
+                    ->fetchFirstColumn();
 
-            sort($this->tableList);
+                sort($this->tableList);
+            } catch (ConnectionException) {
+                $this->tableList = [];
+            }
         }
 
         return $this->tableList;
@@ -109,7 +114,7 @@ class CallStackExtractor implements SingletonInterface
         }
 
         $partialMatch = array_filter(
-            $this->tableList,
+            $this->getTableList(),
             static function ($realTablename) use ($tablename) {
                 preg_match(sprintf('/^%s.*$/', $realTablename), $tablename, $match);
                 return isset($match[0]);
