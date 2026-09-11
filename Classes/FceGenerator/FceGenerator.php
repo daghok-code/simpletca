@@ -217,7 +217,7 @@ class FceGenerator
             throw new NoIdentifierException();
         }
 
-        ExtensionManagementUtility::addTCAcolumns(self::CONTENT_TABLE, $this->columns);
+        ExtensionManagementUtility::addTCAcolumns(self::CONTENT_TABLE, AbstractShortcut::buildAll($this->columns));
         ExtensionManagementUtility::addTcaSelectItem(
             self::CONTENT_TABLE,
             'CType',

@@ -165,6 +165,19 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $tca;
     }
 
+    /**
+     * Converts every shortcut in a column list into its TCA array, leaving plain arrays untouched.
+     *
+     * @param array<string|int, self|array> $columns
+     */
+    public static function buildAll(array $columns): array
+    {
+        return array_map(
+            static fn (self|array $column): array => $column instanceof self ? $column->build() : $column,
+            $columns,
+        );
+    }
+
     #[\Override]
     public function offsetExists(mixed $offset): bool
     {

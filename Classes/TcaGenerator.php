@@ -13,7 +13,9 @@ use Febis\SimpleTca\Exception\CallstackExtractionException;
 use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\FceGenerator\FceGenerator;
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
+use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\TcaBuilder\TcaBuilder;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TcaGenerator extends ShortcutImplementation
@@ -93,6 +95,17 @@ class TcaGenerator extends ShortcutImplementation
             $tsConfigFceGroupIdentifier,
             $additionalTypeConfig
         );
+    }
+
+    /**
+     * Adds columns (shortcuts or plain TCA arrays) to a table via ExtensionManagementUtility::addTCAcolumns(),
+     * building any shortcuts into their TCA array first.
+     *
+     * @param array<string, AbstractShortcut|array> $columns
+     */
+    public static function registerColumns(string $table, array $columns): void
+    {
+        ExtensionManagementUtility::addTCAcolumns($table, AbstractShortcut::buildAll($columns));
     }
 
     /**
