@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Utility;
 
 use Febis\SimpleTca\Data\Typoscript\DataProcessorItem;
@@ -12,7 +14,7 @@ class DataProcessorUtility
     {
         $dataProcessors = [];
         foreach ($columns as $fieldName => $column) {
-            if (false === $column instanceof DataProcessorInterface) {
+            if ($column instanceof DataProcessorInterface === false) {
                 continue;
             }
 

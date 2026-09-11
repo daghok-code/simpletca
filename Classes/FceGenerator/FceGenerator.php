@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\FceGenerator;
 
 use Febis\SimpleTca\Data\TsConfig\FceGroup;
@@ -26,14 +28,14 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class FceGenerator
 {
-    protected final const string CONTENT_TABLE = 'tt_content';
+    final protected const string CONTENT_TABLE = 'tt_content';
 
-    protected final const array FIELDS = [
+    final protected const array FIELDS = [
         'rowDescription' => 'rowDescription,',
         'categories' => 'categories,',
     ];
 
-    protected final const array PALETTES = [
+    final protected const array PALETTES = [
         'general' => '--palette--;;general,',
         'headers' => '--palette--;;headers,',
         'frames' => '--palette--;;frames,',
@@ -43,7 +45,7 @@ class FceGenerator
         'language' => '--palette--;;language,',
     ];
 
-    protected final const array TABS = [
+    final protected const array TABS = [
         'general' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,',
         'appearance' => '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,',
         'access' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,',
@@ -53,7 +55,7 @@ class FceGenerator
         'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,',
     ];
 
-    protected final const array JOINED = [
+    final protected const array JOINED = [
         'generalPrepend' => self::TABS['general'] . self::PALETTES['general'] . self::PALETTES['headers'],
         'appearance' => self::TABS['appearance'] . self::PALETTES['frames'] . self::PALETTES['appearanceLinks'],
         'access' => self::TABS['access'] . self::PALETTES['hidden'] . self::PALETTES['access'],
@@ -179,7 +181,7 @@ class FceGenerator
      */
     public function addColumn(AbstractShortcut | array $column, string | int | null $key = null): void
     {
-        if (false === is_string($key)) {
+        if (is_string($key) === false) {
             if ($column instanceof AbstractShortcut) {
                 $key = $column->getIdentifier();
             } elseif (isset($column['_identifier'])) {
@@ -240,6 +242,51 @@ class FceGenerator
         }
 
         TcaGenerator::resetItemConfig();
+    }
+
+    /**
+     * Function uses exit(0), because otherwise no output is generatedfce
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    public function debugRegisteringFCE(): void
+    {
+        if ($this->autogenerateTsConfig) {
+            $this->generateTsConfig();
+        }
+
+        if ($this->autogenerateTyposcript) {
+            $this->generateTyposcript();
+        }
+
+        $variable = [
+            'ExtensionManagementUtility::addTCAcolumns' => [
+                static::CONTENT_TABLE,
+                $this->columns,
+            ],
+            'ExtensionManagementUtility::addTcaSelectItem' => [
+                static::CONTENT_TABLE,
+                'CType',
+                [
+                    $this->getLabel(),
+                    $this->identifier,
+                    $this->icon,
+                ],
+            ],
+            'ArrayUtility::mergeRecursiveWithOverrule' => [
+                $GLOBALS['TCA'],
+                $this->buildTtContentExtend(),
+            ],
+            'TcaGenerator::getTsConfigData' => [
+                TcaGenerator::getTsConfigData(),
+            ],
+            'TcaGenerator::getTyposcriptData' => [
+                TcaGenerator::getTyposcriptData(),
+            ],
+        ];
+
+        $title = $this->identifier;
+        DebuggerUtility::var_dump($variable, $title, 16);
+        exit(0);
     }
 
     protected function buildTtContentExtend(): array
@@ -323,60 +370,14 @@ class FceGenerator
         return DataProcessorUtility::generate($this->columns);
     }
 
-    /**
-     * Function uses exit(0), because otherwise no output is generatedfce
-     * @SuppressWarnings(PHPMD.ExitExpression)
-     */
-    public function debugRegisteringFCE(): void
-    {
-        if ($this->autogenerateTsConfig) {
-            $this->generateTsConfig();
-        }
-
-        if ($this->autogenerateTyposcript) {
-            $this->generateTyposcript();
-        }
-
-        $variable = [
-            'ExtensionManagementUtility::addTCAcolumns' => [
-                static::CONTENT_TABLE,
-                $this->columns,
-            ],
-            'ExtensionManagementUtility::addTcaSelectItem' => [
-                static::CONTENT_TABLE,
-                'CType',
-                [
-                    $this->getLabel(),
-                    $this->identifier,
-                    $this->icon,
-                ],
-            ],
-            'ArrayUtility::mergeRecursiveWithOverrule' => [
-                $GLOBALS['TCA'],
-                $this->buildTtContentExtend(),
-            ],
-            'TcaGenerator::getTsConfigData' => [
-                TcaGenerator::getTsConfigData(),
-            ],
-            'TcaGenerator::getTyposcriptData' => [
-                TcaGenerator::getTyposcriptData(),
-            ],
-        ];
-
-        $title = $this->identifier;
-        DebuggerUtility::var_dump($variable, $title, 16);
-        exit(0);
-    }
-
     protected function getLabel(): string
     {
         if (str_starts_with($this->cTypeLabel, 'LLL:')) {
             return $this->cTypeLabel;
         } elseif ($this->cTypeLabel !== '') {
             return static::getLocalizedLabel($this->cTypeLabel);
-        } else {
-            return $this->identifier;
         }
+        return $this->identifier;
     }
 
     protected function getDescription(): string

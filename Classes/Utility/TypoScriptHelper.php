@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Utility;
 
 class TypoScriptHelper
@@ -46,7 +48,7 @@ class TypoScriptHelper
      */
     public static function indent(int $count): string
     {
-        return str_repeat(" ", $count);
+        return str_repeat(' ', $count);
     }
 
     /**

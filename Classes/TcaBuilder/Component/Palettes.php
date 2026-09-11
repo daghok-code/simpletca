@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -18,6 +20,14 @@ class Palettes implements ComponentInterface
     public function addPalette(array $palette)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->palettes, $palette);
+    }
+
+    #[\Override]
+    public function getArray(): array
+    {
+        return [
+            'palettes' => $this->palettes,
+        ];
     }
 
     private function addBasePalettes()
@@ -66,11 +76,5 @@ class Palettes implements ComponentInterface
                 ',
             ],
         ];
-    }
-
-    #[\Override]
-    public function getArray(): array
-    {
-        return ['palettes' => $this->palettes];
     }
 }

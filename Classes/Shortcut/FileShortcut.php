@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
@@ -10,29 +12,13 @@ use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
  */
 class FileShortcut extends AbstractShortcut implements DataProcessorInterface
 {
-    #[\Override]
-    protected static function getType(): string
-    {
-        return "file";
-    }
-
-    #[\Override]
-    protected static function getAllowedProperties(): array
-    {
-        return [
-            'minitems',
-            'maxitems',
-            'overrideChildTca',
-            'allowed',
-        ];
-    }
-
-    #[\Override]
-    protected static function getDefaultProperties(): array
-    {
-        return [
-            'allowed' => 'common-image-types',
-        ];
+    public function __construct(
+        ?string $identifier = null,
+        protected ?int $minitems = null,
+        protected ?int $maxitems = null,
+        protected ?string $allowed = null,
+    ) {
+        parent::__construct($identifier);
     }
 
     #[\Override]
@@ -52,13 +38,28 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
             'as' => $fieldName,
         ];
     }
+    #[\Override]
+    protected static function getType(): string
+    {
+        return 'file';
+    }
 
-    public function __construct(
-        ?string $identifier = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null,
-        protected ?string $allowed = null,
-    ) {
-        parent::__construct($identifier);
+    #[\Override]
+    protected static function getAllowedProperties(): array
+    {
+        return [
+            'minitems',
+            'maxitems',
+            'overrideChildTca',
+            'allowed',
+        ];
+    }
+
+    #[\Override]
+    protected static function getDefaultProperties(): array
+    {
+        return [
+            'allowed' => 'common-image-types',
+        ];
     }
 }
