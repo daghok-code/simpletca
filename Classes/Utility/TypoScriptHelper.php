@@ -14,7 +14,7 @@ class TypoScriptHelper
      * Transforms a php object into a readable typoscript notation
      */
     public static function objectToTextualRepresentation(
-        string $key,
+        int|string $key,
         array $tsObject,
         int $prevIndent = 0,
     ): string {
