@@ -36,6 +36,7 @@ class RelationMMShortcut extends AbstractShortcut
 
         return $this;
     }
+
     #[\Override]
     protected static function getType(): string
     {

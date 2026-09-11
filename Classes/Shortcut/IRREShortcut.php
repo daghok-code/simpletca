@@ -58,6 +58,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
 
         return $this;
     }
+
     #[\Override]
     protected static function getType(): string
     {

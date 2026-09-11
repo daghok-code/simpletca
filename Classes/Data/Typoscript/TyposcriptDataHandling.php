@@ -64,6 +64,7 @@ class TyposcriptDataHandling extends AbstractDataHandling
         if ($this->hasFceItem($identifier) && !$override) {
             throw new TyposcriptExistsException($identifier);
         }
+
         $this->data->fceItems[$identifier] = $fceItem;
 
         $this->writeData();

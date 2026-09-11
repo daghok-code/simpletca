@@ -197,6 +197,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         return $this->identifier;
     }
+
     abstract protected static function getType(): string;
 
     /** String[] */

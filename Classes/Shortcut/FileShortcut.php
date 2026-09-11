@@ -38,6 +38,7 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
             'as' => $fieldName,
         ];
     }
+
     #[\Override]
     protected static function getType(): string
     {

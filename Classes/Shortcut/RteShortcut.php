@@ -20,6 +20,7 @@ class RteShortcut extends AbstractShortcut
 
         parent::__construct($identifier);
     }
+
     #[\Override]
     protected static function getType(): string
     {

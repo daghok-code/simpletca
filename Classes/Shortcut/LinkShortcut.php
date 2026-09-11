@@ -9,11 +9,7 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class LinkShortcut extends AbstractShortcut
 {
-    public function __construct(
-        ?string $identifier = null,
-    ) {
-        parent::__construct($identifier);
-    }
+
     #[\Override]
     protected static function getType(): string
     {

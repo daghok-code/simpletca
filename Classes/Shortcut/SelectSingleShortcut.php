@@ -18,6 +18,7 @@ class SelectSingleShortcut extends AbstractShortcut
         $this->renderType ??= 'selectSingle';
         parent::__construct($identifier);
     }
+
     #[\Override]
     protected static function getType(): string
     {

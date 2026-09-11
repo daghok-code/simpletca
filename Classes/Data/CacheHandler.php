@@ -27,6 +27,7 @@ class CacheHandler
         protected ?PhpFrontend $codeCache = null,
     ) {
     }
+
     /**
      * @throws CacheInstanceException
      */
@@ -126,7 +127,7 @@ class CacheHandler
 
     protected function getConcreteCacheFilename(): string
     {
-        return (new PackageDependentCacheIdentifier(GeneralUtility::makeInstance(PackageManager::class)))
+        return new PackageDependentCacheIdentifier(GeneralUtility::makeInstance(PackageManager::class))
             ->withPrefix($this->cacheIdentifier)->toString();
     }
 }

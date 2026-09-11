@@ -65,14 +65,14 @@ class Palettes implements ComponentInterface
         return [
             'paletteHidden' => [
                 'showitem' => '
-                    hidden;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:field.default.hidden
+                    hidden;frontend.db.tt_content:hidden
                 ',
             ],
             'paletteAccess' => [
-                'label' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access',
+                'label' => 'core.form.palettes:access',
                 'showitem' => '
-                    starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.starttime_formlabel,
-                    endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.endtime_formlabel
+                    starttime,
+                    endtime
                 ',
             ],
         ];

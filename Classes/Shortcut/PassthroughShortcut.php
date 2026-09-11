@@ -10,12 +10,6 @@ class PassthroughShortcut extends AbstractShortcut
 
     protected ?string $renderType = null;
 
-    public function __construct(
-        ?string $identifier = null,
-    ) {
-        parent::__construct($identifier);
-    }
-
     #[\Override]
     protected static function getType(): string
     {

@@ -35,6 +35,7 @@ class TsConfigDataHandling extends AbstractDataHandling
         if ($this->hasFceItem($identifier) && !$override) {
             throw new TsConfigExistsException($identifier, false);
         }
+
         $this->data->fceItems[$identifier] = $fceItem;
 
         $this->writeData();
@@ -70,6 +71,7 @@ class TsConfigDataHandling extends AbstractDataHandling
         if ($this->hasFceGroup($identifier) && !$override) {
             throw new TsConfigExistsException($identifier, true);
         }
+
         $this->data->fceGroups[$identifier] = $fceGroup;
 
         $this->writeData();

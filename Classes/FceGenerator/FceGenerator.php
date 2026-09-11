@@ -217,9 +217,9 @@ class FceGenerator
             throw new NoIdentifierException();
         }
 
-        ExtensionManagementUtility::addTCAcolumns(static::CONTENT_TABLE, $this->columns);
+        ExtensionManagementUtility::addTCAcolumns(self::CONTENT_TABLE, $this->columns);
         ExtensionManagementUtility::addTcaSelectItem(
-            static::CONTENT_TABLE,
+            self::CONTENT_TABLE,
             'CType',
             [
                 'label' => $this->getLabel(),
@@ -260,11 +260,11 @@ class FceGenerator
 
         $variable = [
             'ExtensionManagementUtility::addTCAcolumns' => [
-                static::CONTENT_TABLE,
+                self::CONTENT_TABLE,
                 $this->columns,
             ],
             'ExtensionManagementUtility::addTcaSelectItem' => [
-                static::CONTENT_TABLE,
+                self::CONTENT_TABLE,
                 'CType',
                 [
                     $this->getLabel(),
@@ -292,7 +292,7 @@ class FceGenerator
     protected function buildTtContentExtend(): array
     {
         return [
-            static::CONTENT_TABLE => [
+            self::CONTENT_TABLE => [
                 'ctrl' => [
                     'typeicon_classes' => [
                         $this->identifier => $this->icon,
@@ -374,9 +374,12 @@ class FceGenerator
     {
         if (str_starts_with($this->cTypeLabel, 'LLL:')) {
             return $this->cTypeLabel;
-        } elseif ($this->cTypeLabel !== '') {
+        }
+
+        if ($this->cTypeLabel !== '') {
             return static::getLocalizedLabel($this->cTypeLabel);
         }
+
         return $this->identifier;
     }
 
@@ -411,14 +414,14 @@ class FceGenerator
     protected static function showitemDefault(string $showitem): string
     {
         return
-            static::JOINED['generalPrepend'] .
+            self::JOINED['generalPrepend'] .
             $showitem .
-            static::JOINED['appearance'] .
-            static::JOINED['language'] .
-            static::JOINED['access'] .
-            static::JOINED['categories'] .
-            static::JOINED['notes'] .
-            static::TABS['extended'];
+            self::JOINED['appearance'] .
+            self::JOINED['language'] .
+            self::JOINED['access'] .
+            self::JOINED['categories'] .
+            self::JOINED['notes'] .
+            self::TABS['extended'];
     }
 
     protected static function showitemDefaultNoHeader(string $showitem): string
@@ -427,12 +430,12 @@ class FceGenerator
             self::TABS['general'] .
             self::PALETTES['general'] .
             $showitem .
-            static::JOINED['appearance'] .
-            static::JOINED['language'] .
-            static::JOINED['access'] .
-            static::JOINED['categories'] .
-            static::JOINED['notes'] .
-            static::TABS['extended'];
+            self::JOINED['appearance'] .
+            self::JOINED['language'] .
+            self::JOINED['access'] .
+            self::JOINED['categories'] .
+            self::JOINED['notes'] .
+            self::TABS['extended'];
     }
 
     protected static function showitemDefaultNoHeaderNoAppearance(string $showitem): string
@@ -441,11 +444,11 @@ class FceGenerator
             self::TABS['general'] .
             self::PALETTES['general'] .
             $showitem .
-            static::JOINED['language'] .
-            static::JOINED['access'] .
-            static::JOINED['categories'] .
-            static::JOINED['notes'] .
-            static::TABS['extended'];
+            self::JOINED['language'] .
+            self::JOINED['access'] .
+            self::JOINED['categories'] .
+            self::JOINED['notes'] .
+            self::TABS['extended'];
     }
 
     protected static function withSeparatorAppended(string $showitem): string

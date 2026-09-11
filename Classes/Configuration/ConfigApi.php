@@ -21,22 +21,15 @@ trait ConfigApi
      */
     public function set(string $key, mixed $value, string $level = ConfigInterface::LEVEL_FILE): void
     {
-        switch ($level) {
-            case ConfigInterface::LEVEL_SYSTEM:
-                $this->cachedConfigs['system']->{$key} = $value;
-                break;
-            case ConfigInterface::LEVEL_EXTENSION:
-                $this->cachedConfigs['extension'][$this->current['extensionId']]->{$key} = $value;
-                break;
-            case ConfigInterface::LEVEL_FILE:
-                $this->cachedConfigs['file'][$this->current['fileId']]->{$key} = $value;
-                break;
-            default:
-                throw new InvalidConfigException(
-                    sprintf("The config type '%s' does not exist.", $level),
-                    1729511178,
-                );
-        }
+        $this->cachedConfigs['system']->{$key} = match ($level) {
+            ConfigInterface::LEVEL_SYSTEM => $value,
+            ConfigInterface::LEVEL_EXTENSION => $value,
+            ConfigInterface::LEVEL_FILE => $value,
+            default => throw new InvalidConfigException(
+                sprintf("The config type '%s' does not exist.", $level),
+                1729511178,
+            ),
+        };
     }
 
     public function ll(): string

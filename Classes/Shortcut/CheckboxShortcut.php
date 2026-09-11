@@ -21,6 +21,7 @@ class CheckboxShortcut extends AbstractShortcut
         $this->renderType = 'checkboxToggle';
         return $this;
     }
+
     #[\Override]
     protected static function getType(): string
     {

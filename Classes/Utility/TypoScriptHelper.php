@@ -56,7 +56,7 @@ class TypoScriptHelper
      */
     public static function snakeToCamel(string $input): string
     {
-        return implode('', array_map('ucfirst', explode('_', $input)));
+        return implode('', array_map(ucfirst(...), explode('_', $input)));
     }
 
     public static function transformFromTypedTyposcript(array $input): array

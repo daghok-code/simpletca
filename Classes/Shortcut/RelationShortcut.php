@@ -59,6 +59,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
 
         return $this;
     }
+
     #[\Override]
     protected static function getType(): string
     {
