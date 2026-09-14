@@ -105,7 +105,7 @@ class TcaGenerator extends ShortcutImplementation
      */
     public static function registerColumns(string $table, array $columns): void
     {
-        ExtensionManagementUtility::addTCAcolumns($table, AbstractShortcut::buildAll($columns));
+        ExtensionManagementUtility::addTCAcolumns($table, AbstractShortcut::buildAll($columns, $table));
     }
 
     /**

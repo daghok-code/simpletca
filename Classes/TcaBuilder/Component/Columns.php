@@ -58,7 +58,7 @@ class Columns implements ComponentInterface
 
         $this->completeLabelPaths();
         return [
-            'columns' => AbstractShortcut::buildAll($this->columns),
+            'columns' => AbstractShortcut::buildAll($this->columns, $this->table),
         ];
     }
 

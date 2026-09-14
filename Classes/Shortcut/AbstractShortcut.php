@@ -19,6 +19,15 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
+    /**
+     * Unbuilt shortcut objects per table, keyed by the table they were registered for via buildAll().
+     * DataProcessorUtility reads this to recurse into a referenced table's own DataProcessorInterface
+     * columns (e.g. file fields) — $GLOBALS['TCA'] only ever holds the already-built plain-array form.
+     *
+     * @var array<string, array<string|int, self|array>>
+     */
+    protected static array $originalColumnsByTable = [];
+
     /** For Properties, that are not set by this shortcut, but allowed by TYPO3. Set by withAdditionalAttributes */
     protected ?array $additionalAttributes = null;
 
@@ -170,12 +179,27 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
      *
      * @param array<string|int, self|array> $columns
      */
-    public static function buildAll(array $columns): array
+    public static function buildAll(array $columns, ?string $table = null): array
     {
+        if ($table !== null) {
+            self::$originalColumnsByTable[$table] = $columns;
+        }
+
         return array_map(
             static fn (self|array $column): array => $column instanceof self ? $column->build() : $column,
             $columns,
         );
+    }
+
+    /**
+     * The unbuilt shortcut objects last registered for a table via buildAll(), for recursive
+     * DataProcessorInterface lookups. Empty if the table's columns were never built with a table name.
+     *
+     * @return array<string|int, self|array>
+     */
+    public static function getOriginalColumns(string $table): array
+    {
+        return self::$originalColumnsByTable[$table] ?? [];
     }
 
     #[\Override]

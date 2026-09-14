@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Febis\SimpleTca\Utility;
 
 use Febis\SimpleTca\Data\Typoscript\DataProcessorItem;
+use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\Shortcut\DataProcessorInterface;
 use Febis\SimpleTca\Shortcut\RecursiveDataProcessorInterface;
 
@@ -20,7 +21,7 @@ class DataProcessorUtility
 
             if ($column instanceof RecursiveDataProcessorInterface) {
                 $refTable = $column->getTcaTable();
-                $refTableColumns = $GLOBALS['TCA'][$refTable]['columns'] ?? [];
+                $refTableColumns = AbstractShortcut::getOriginalColumns($refTable);
                 $subDataProcessors = self::generate($refTableColumns, $refTable);
             }
 
