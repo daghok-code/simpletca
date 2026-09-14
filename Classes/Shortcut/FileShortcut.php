@@ -17,6 +17,7 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
         protected ?int $minitems = null,
         protected ?int $maxitems = null,
         protected ?string $allowed = null,
+        protected ?string $as = null,
     ) {
         parent::__construct($identifier);
     }
@@ -35,7 +36,7 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
                 'table' => $tableName,
                 'fieldName' => $fieldName,
             ],
-            'as' => $fieldName,
+            'as' => $this->as ?? $fieldName,
         ];
     }
 
